@@ -10,12 +10,11 @@ import { UpdatePageInput } from './dto/update-page.input';
 
 @Injectable()
 export class PagesService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async createPage(data: CreatePageInput) {
     const { title, workspaceId, ownerId, parentPageId, isDatabase } = data;
 
-    // Validate foreign keys
     await this.validateWorkspace(workspaceId);
     await this.validateOwner(ownerId);
 
@@ -23,7 +22,6 @@ export class PagesService {
       await this.validateParentPage(parentPageId, workspaceId);
     }
 
-    // Prevent duplicate titles within the same parent/workspace
     const duplicate = await this.prisma.page.findFirst({
       where: {
         title,
@@ -33,7 +31,7 @@ export class PagesService {
     });
     if (duplicate) {
       throw new ConflictException(
-        `A page with title "${title}" already exists in this section.`
+        `A page with title "${title}" already exists in this section.`,
       );
     }
 
@@ -116,9 +114,10 @@ export class PagesService {
       pageSize,
       totalPages: Math.ceil(total / pageSize),
     };
-  } 7
+  }
+
   async updatePage(id: number, data: UpdatePageInput) {
-    const page = await this.getPageById(id); // throws if not found
+    const page = await this.getPageById(id);
 
     if (data.parentPageId && data.parentPageId === id) {
       throw new BadRequestException('A page cannot be its own parent.');
@@ -130,7 +129,9 @@ export class PagesService {
       });
       if (!parent) throw new BadRequestException('Parent page not found.');
       if (parent.workspaceId !== page.workspaceId) {
-        throw new BadRequestException('Parent page must belong to the same workspace.');
+        throw new BadRequestException(
+          'Parent page must belong to the same workspace.',
+        );
       }
 
       if (await this.checkCircularNesting(id, data.parentPageId)) {
@@ -146,7 +147,8 @@ export class PagesService {
 
   async updateSortPosition(id: number, newPosition: number) {
     await this.getPageById(id);
-    if (newPosition < 0) throw new BadRequestException('Sort position must be non-negative.');
+    if (newPosition < 0)
+      throw new BadRequestException('Sort position must be non-negative.');
     return this.prisma.page.update({
       where: { id },
       data: { sortPosition: newPosition },
@@ -175,9 +177,13 @@ export class PagesService {
   }
 
   private async validateWorkspace(workspaceId: number) {
-    const workspace = await this.prisma.workspace.findUnique({ where: { id: workspaceId } });
+    const workspace = await this.prisma.workspace.findUnique({
+      where: { id: workspaceId },
+    });
     if (!workspace) {
-      throw new NotFoundException(`Workspace with ID ${workspaceId} not found.`);
+      throw new NotFoundException(
+        `Workspace with ID ${workspaceId} not found.`,
+      );
     }
   }
 
@@ -189,19 +195,26 @@ export class PagesService {
   }
 
   private async validateParentPage(parentPageId: number, workspaceId: number) {
-    const parent = await this.prisma.page.findUnique({ where: { id: parentPageId } });
+    const parent = await this.prisma.page.findUnique({
+      where: { id: parentPageId },
+    });
     if (!parent) {
-      throw new BadRequestException(`Parent page with ID ${parentPageId} not found.`);
+      throw new BadRequestException(
+        `Parent page with ID ${parentPageId} not found.`,
+      );
     }
     if (parent.workspaceId !== workspaceId) {
       throw new BadRequestException(
-        'Parent page must belong to the same workspace as the new page.'
+        'Parent page must belong to the same workspace as the new page.',
       );
     }
   }
 
-  private async checkCircularNesting(childId: number, parentId: number): Promise<boolean> {
-    let currentId: number | null = parentId; // ✅ allow null
+  private async checkCircularNesting(
+    childId: number,
+    parentId: number,
+  ): Promise<boolean> {
+    let currentId: number | null = parentId; 
 
     while (currentId !== null) {
       if (currentId === childId) return true;
@@ -213,7 +226,7 @@ export class PagesService {
 
       if (!parent) break;
 
-      currentId = parent.parentPageId; // could be null
+      currentId = parent.parentPageId;
     }
 
     return false;
@@ -229,7 +242,7 @@ export class PagesService {
     return this.prisma.page.update({
       where: { id },
       data: {
-        inTrash: true
+        inTrash: true,
       },
     });
   }

@@ -1,11 +1,5 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import {
-  IsInt,
-  IsOptional,
-  IsString,
-  Min,
-  IsBoolean,
-} from 'class-validator';
+import { IsInt, IsOptional, IsString, Min, IsBoolean } from 'class-validator';
 
 @ArgsType()
 export class GetPagesArgs {

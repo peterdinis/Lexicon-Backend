@@ -12,7 +12,7 @@ import { UsersService } from 'src/users/users.service';
 export class AuthResolver {
   constructor(
     private authService: AuthService,
-    private usersService: UsersService
+    private usersService: UsersService,
   ) {}
 
   @Mutation(() => String)

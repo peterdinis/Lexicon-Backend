@@ -28,4 +28,7 @@ export class Page {
 
   @Field()
   updatedAt: Date;
+
+  @Field(() => Date, { nullable: true })
+  trashedAt?: Date;
 }

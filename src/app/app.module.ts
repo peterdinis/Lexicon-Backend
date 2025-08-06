@@ -17,7 +17,7 @@ import { PagesModule } from 'src/pages/pages.module';
       isGlobal: true,
     }),
     PrismaModule,
-    PagesModule
+    PagesModule,
   ],
 })
 export class AppModule {}
