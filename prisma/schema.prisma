@@ -43,6 +43,7 @@ model Page {
   propertyValues PropertyValue[]
   events         CalendarEvent[]
   sortPosition   Int        @default(0)
+  inTrash        Boolean?   @default(false)
   ownerId        Int
   owner          User       @relation("OwnerPages", fields: [ownerId], references: [id])
   createdAt      DateTime @default(now())

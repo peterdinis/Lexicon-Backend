@@ -10,7 +10,7 @@ import { UpdatePageInput } from './dto/update-page.input';
 
 @Injectable()
 export class PagesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async createPage(data: CreatePageInput) {
     const { title, workspaceId, ownerId, parentPageId, isDatabase } = data;
@@ -116,7 +116,7 @@ export class PagesService {
       pageSize,
       totalPages: Math.ceil(total / pageSize),
     };
-  }7
+  } 7
   async updatePage(id: number, data: UpdatePageInput) {
     const page = await this.getPageById(id); // throws if not found
 
@@ -201,21 +201,64 @@ export class PagesService {
   }
 
   private async checkCircularNesting(childId: number, parentId: number): Promise<boolean> {
-  let currentId: number | null = parentId; // ✅ allow null
+    let currentId: number | null = parentId; // ✅ allow null
 
-  while (currentId !== null) {
-    if (currentId === childId) return true;
+    while (currentId !== null) {
+      if (currentId === childId) return true;
 
-    const parent = await this.prisma.page.findUnique({
-      where: { id: currentId },
-      select: { parentPageId: true },
-    });
+      const parent = await this.prisma.page.findUnique({
+        where: { id: currentId },
+        select: { parentPageId: true },
+      });
 
-    if (!parent) break;
+      if (!parent) break;
 
-    currentId = parent.parentPageId; // could be null
+      currentId = parent.parentPageId; // could be null
+    }
+
+    return false;
   }
 
-  return false;
-}
+  async moveToTrash(id: number) {
+    const page = await this.getPageById(id);
+
+    if (page.inTrash) {
+      throw new BadRequestException('Page is already in the trash.');
+    }
+
+    return this.prisma.page.update({
+      where: { id },
+      data: {
+        inTrash: true
+      },
+    });
+  }
+
+  async restoreFromTrash(id: number) {
+    const page = await this.getPageById(id);
+
+    if (!page.inTrash) {
+      throw new BadRequestException('Page is not in the trash.');
+    }
+
+    return this.prisma.page.update({
+      where: { id },
+      data: {
+        inTrash: null,
+      },
+    });
+  }
+
+  async getTrashedPages(workspaceId: number, ownerId?: number) {
+    await this.validateWorkspace(workspaceId);
+
+    return this.prisma.page.findMany({
+      where: {
+        workspaceId,
+        inTrash: { not: null },
+        ...(ownerId && { ownerId }),
+      },
+      orderBy: { inTrash: 'desc' },
+    });
+  }
 }
