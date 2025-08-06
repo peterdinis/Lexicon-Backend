@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -12,4 +6,108 @@ generator client {
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String   
+  name      String?
+  lastName  String?
+  photoUrl  String?
+  pages     Page[]   @relation("OwnerPages")
+  events    CalendarEvent[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Workspace {
+  id        Int      @id @default(autoincrement())
+  name      String
+  pages     Page[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Page {
+  id             Int      @id @default(autoincrement())
+  title          String
+  isDatabase     Boolean  @default(false)
+  parentPageId   Int?
+  parentPage     Page?     @relation("SubPages", fields: [parentPageId], references: [id])
+  subPages       Page[]    @relation("SubPages")
+  workspaceId    Int
+  workspace      Workspace @relation(fields: [workspaceId], references: [id])
+  contents       Content[]
+  properties     Property[]
+  propertyValues PropertyValue[]
+  events         CalendarEvent[]
+
+  ownerId        Int
+  owner          User       @relation("OwnerPages", fields: [ownerId], references: [id])
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Content {
+  id        Int       @id @default(autoincrement())
+  type      ContentType
+  data      Json
+  order     Int
+  pageId    Int
+  page      Page      @relation(fields: [pageId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+enum ContentType {
+  paragraph
+  heading
+  todo
+  code
+  image
+}
+
+model Property {
+  id        Int             @id @default(autoincrement())
+  name      String
+  type      PropertyType
+  pageId    Int
+  page      Page            @relation(fields: [pageId], references: [id])
+  values    PropertyValue[] 
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+enum PropertyType {
+  text
+  number
+  checkbox
+  date
+  select
+}
+
+model PropertyValue {
+  id         Int     @id @default(autoincrement())
+  pageId     Int
+  propertyId Int
+  value      Json
+  page       Page     @relation(fields: [pageId], references: [id])
+  property   Property @relation(fields: [propertyId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model CalendarEvent {
+  id        Int      @id @default(autoincrement())
+  title     String
+  start     DateTime
+  end       DateTime
+  pageId    Int
+  page      Page     @relation(fields: [pageId], references: [id])
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
