@@ -42,7 +42,7 @@ model Page {
   properties     Property[]
   propertyValues PropertyValue[]
   events         CalendarEvent[]
-
+  sortPosition   Int        @default(0)
   ownerId        Int
   owner          User       @relation("OwnerPages", fields: [ownerId], references: [id])
 
