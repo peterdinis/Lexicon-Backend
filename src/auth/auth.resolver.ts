@@ -6,10 +6,14 @@ import { UseGuards } from '@nestjs/common';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { GqlAuthGuard } from './guard/gql-auth.guard';
 import { User } from 'src/users/users.model';
+import { UsersService } from 'src/users/users.service';
 
 @Resolver()
 export class AuthResolver {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private usersService: UsersService
+  ) {}
 
   @Mutation(() => String)
   async login(@Args('data') data: LoginInput): Promise<string> {

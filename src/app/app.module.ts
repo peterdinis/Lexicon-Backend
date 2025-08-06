@@ -4,6 +4,7 @@ import { join } from 'path';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
+import { PagesModule } from 'src/pages/pages.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
     }),
     PrismaModule,
+    PagesModule
   ],
 })
 export class AppModule {}
