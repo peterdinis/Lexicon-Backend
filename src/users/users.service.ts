@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserInput } from './dto/create-user-input';
 import * as bcrypt from 'bcrypt';
@@ -23,7 +27,9 @@ export class UsersService {
     }
 
     if (!data.password || data.password.length < 6) {
-      throw new BadRequestException('Password must be at least 6 characters long.');
+      throw new BadRequestException(
+        'Password must be at least 6 characters long.',
+      );
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
