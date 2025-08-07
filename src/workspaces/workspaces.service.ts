@@ -1,9 +1,6 @@
-import {
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { WorkspaceQueryInput } from './dto/workspace-query.input';
 import { CreateWorkspaceInput } from './dto/create-workspace-input';
 import { UpdateWorkspaceInput } from './dto/update-workspace-input';
 
@@ -12,21 +9,42 @@ export class WorkspacesService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateWorkspaceInput) {
-    // Optional: check if a workspace with same name exists
     const existing = await this.prisma.workspace.findFirst({
       where: { name: data.name },
     });
-    if (existing) {
-      throw new BadRequestException('Workspace name already exists');
-    }
+    if (existing) throw new Error('Workspace name already exists');
 
     return this.prisma.workspace.create({ data });
   }
 
-  async findAll() {
-    return this.prisma.workspace.findMany({
-      include: { pages: true },
-    });
+  async findAll(query: WorkspaceQueryInput) {
+    const { search, skip = 0, take = 10 } = query;
+
+    const where = search
+      ? {
+          name: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        }
+      : {};
+
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.workspace.findMany({
+        where,
+        skip,
+        take,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          pages: true,
+        },
+      }),
+      this.prisma.workspace.count({ where }),
+    ]);
+
+    return { items, total };
   }
 
   async findOne(id: number) {
@@ -35,19 +53,13 @@ export class WorkspacesService {
       include: { pages: true },
     });
 
-    if (!workspace) {
-      throw new NotFoundException(`Workspace with ID ${id} not found`);
-    }
-
+    if (!workspace) throw new Error(`Workspace with ID ${id} not found`);
     return workspace;
   }
 
   async update(id: number, data: UpdateWorkspaceInput) {
     const existing = await this.prisma.workspace.findUnique({ where: { id } });
-
-    if (!existing) {
-      throw new NotFoundException(`Workspace with ID ${id} not found`);
-    }
+    if (!existing) throw new Error(`Workspace with ID ${id} not found`);
 
     return this.prisma.workspace.update({
       where: { id },
@@ -57,13 +69,8 @@ export class WorkspacesService {
 
   async remove(id: number) {
     const existing = await this.prisma.workspace.findUnique({ where: { id } });
+    if (!existing) throw new Error(`Workspace with ID ${id} not found`);
 
-    if (!existing) {
-      throw new NotFoundException(`Workspace with ID ${id} not found`);
-    }
-
-    return this.prisma.workspace.delete({
-      where: { id },
-    });
+    return this.prisma.workspace.delete({ where: { id } });
   }
 }
