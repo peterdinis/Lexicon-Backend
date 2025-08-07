@@ -9,6 +9,7 @@ import { WorkspacesModule } from 'src/workspaces/workspaces.module';
 import { TasksModule } from 'src/tasks/tasks.module';
 import { LoggedInterceptor } from 'src/shared/interceptors/logged.interceptor';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { NotificationModule } from 'src/notification/notification.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     PagesModule,
     WorkspacesModule,
     TasksModule,
+    NotificationModule
   ],
   providers: [
     {
