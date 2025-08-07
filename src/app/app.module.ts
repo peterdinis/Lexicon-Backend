@@ -16,6 +16,15 @@ import { NotificationModule } from 'src/notification/notification.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       graphiql: true,
+      installSubscriptionHandlers: true,
+       context: ({ req, connection }) => {
+        if (connection) {
+          // Subscriptions context
+          return { user: connection.context.user };
+        }
+        // HTTP request context
+        return { user: req.user };
+      },
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     ConfigModule.forRoot({
