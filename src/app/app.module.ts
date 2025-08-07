@@ -7,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { PagesModule } from 'src/pages/pages.module';
 import { WorkspacesModule } from 'src/workspaces/workspaces.module';
 import { TasksModule } from 'src/tasks/tasks.module';
+import { LoggedInterceptor } from 'src/shared/interceptors/logged.interceptor';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -23,5 +25,11 @@ import { TasksModule } from 'src/tasks/tasks.module';
     WorkspacesModule,
     TasksModule,
   ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggedInterceptor,
+    }
+  ]
 })
-export class AppModule {}
+export class AppModule { }
