@@ -214,7 +214,7 @@ export class PagesService {
     childId: number,
     parentId: number,
   ): Promise<boolean> {
-    let currentId: number | null = parentId; 
+    let currentId: number | null = parentId;
 
     while (currentId !== null) {
       if (currentId === childId) return true;
