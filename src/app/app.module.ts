@@ -17,7 +17,7 @@ import { NotificationModule } from 'src/notification/notification.module';
       driver: ApolloDriver,
       graphiql: true,
       installSubscriptionHandlers: true,
-       context: ({ req, connection }) => {
+      context: ({ req, connection }) => {
         if (connection) {
           // Subscriptions context
           return { user: connection.context.user };
@@ -34,13 +34,13 @@ import { NotificationModule } from 'src/notification/notification.module';
     PagesModule,
     WorkspacesModule,
     TasksModule,
-    NotificationModule
+    NotificationModule,
   ],
   providers: [
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggedInterceptor,
-    }
-  ]
+    },
+  ],
 })
-export class AppModule { }
+export class AppModule {}

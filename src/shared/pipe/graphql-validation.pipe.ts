@@ -15,18 +15,15 @@ export class GraphQLValidationPipe implements PipeTransform {
     forbidNonWhitelisted: true,
     transform: true,
     exceptionFactory: (errors) => {
-      return new GraphQLError(
-        'Validation error',
-        {
-          extensions: {
-            code: 'GRAPHQL_VALIDATION_FAILED',
-            errors: errors.map((error) => ({
-              field: error.property,
-              constraints: error.constraints,
-            })),
-          },
-        }
-      );
+      return new GraphQLError('Validation error', {
+        extensions: {
+          code: 'GRAPHQL_VALIDATION_FAILED',
+          errors: errors.map((error) => ({
+            field: error.property,
+            constraints: error.constraints,
+          })),
+        },
+      });
     },
   });
 

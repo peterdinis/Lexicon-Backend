@@ -12,12 +12,11 @@ import { GqlAuthGuard } from 'src/auth/guard/gql-auth.guard';
 import { NotificationsService } from './notification.service';
 import { PubSub } from 'graphql-subscriptions';
 
-
 const pubSub = new PubSub();
 
 @Resolver(() => Notification)
 export class NotificationsResolver {
-  constructor(private notificationsService: NotificationsService) { }
+  constructor(private notificationsService: NotificationsService) {}
 
   @Query(() => [Notification])
   @UseGuards(GqlAuthGuard)
