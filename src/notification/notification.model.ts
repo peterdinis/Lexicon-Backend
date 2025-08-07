@@ -5,8 +5,8 @@ export class Notification {
   @Field(() => ID)
   id: string;
 
-  @Field()
-  userId: string;
+  @Field(() => Number)
+  userId: number;
 
   @Field()
   type: string;
@@ -15,11 +15,14 @@ export class Notification {
   title: string;
 
   @Field({ nullable: true })
-  description?: string;
+  description: string | null;
 
   @Field()
   isRead: boolean;
 
   @Field()
   createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
 }

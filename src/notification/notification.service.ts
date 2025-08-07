@@ -1,9 +1,25 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { PubSub } from 'graphql-subscriptions';
+import { Notification } from './notification.model';
+
+interface NotificationEvents {
+  [eventName: string]: unknown;
+  notificationCreated: {
+    notificationCreated: Notification;
+    userId: number;
+  };
+}
 
 @Injectable()
 export class NotificationsService {
+  private pubSub = new PubSub<NotificationEvents>();
+
   constructor(private prisma: PrismaService) {}
+
+  getPubSub() {
+    return this.pubSub;
+  }
 
   private parseUserId(userId: string): number {
     const id = Number(userId);
@@ -14,20 +30,29 @@ export class NotificationsService {
   }
 
   async createNotification(data: {
-    userId: string; // prijímame string, ale konvertujeme
+    userId: string;
     type: string;
     title: string;
     description?: string;
-  }){
+  }) {
     const userId = this.parseUserId(data.userId);
-    return this.prisma.notification.create({
+
+    const notification = await this.prisma.notification.create({
       data: {
         userId,
         type: data.type,
         title: data.title,
-        description: data.description,
+        description: data.description!,
       },
     });
+
+    // Publish the new notification event
+    this.pubSub.publish('notificationCreated', {
+      notificationCreated: notification,
+      userId,
+    });
+
+    return notification;
   }
 
   async getUserNotifications(userId: string) {
