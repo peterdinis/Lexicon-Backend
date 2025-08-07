@@ -6,6 +6,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { PagesModule } from 'src/pages/pages.module';
 import { WorkspacesModule } from 'src/workspaces/workspaces.module';
+import { TasksModule } from 'src/tasks/tasks.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { WorkspacesModule } from 'src/workspaces/workspaces.module';
     PrismaModule,
     PagesModule,
     WorkspacesModule,
+    TasksModule,
   ],
 })
 export class AppModule {}
