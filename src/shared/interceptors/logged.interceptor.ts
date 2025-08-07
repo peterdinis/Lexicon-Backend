@@ -27,9 +27,9 @@ export class LoggedInterceptor implements NestInterceptor {
         this.logger.log(
           `${operation.toUpperCase()} "${operationName}" ${
             user ? `by ${user.email || user.id}` : ''
-          } - ${Date.now() - now}ms`
+          } - ${Date.now() - now}ms`,
         );
-      })
+      }),
     );
   }
 }
