@@ -1,6 +1,5 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';import { Page } from 'src/pages/pages.model';
-;
-
+import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Page } from 'src/pages/pages.model';
 @ObjectType()
 export class Workspace {
   @Field(() => Int)

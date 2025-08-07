@@ -19,7 +19,7 @@ import { WorkspacesModule } from 'src/workspaces/workspaces.module';
     }),
     PrismaModule,
     PagesModule,
-    WorkspacesModule
+    WorkspacesModule,
   ],
 })
 export class AppModule {}
