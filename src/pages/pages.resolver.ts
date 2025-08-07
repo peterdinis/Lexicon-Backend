@@ -54,7 +54,7 @@ export class PagesResolver {
   async movePageToTrash(@Args('id', { type: () => Int }) id: number) {
     return this.pagesService.moveToTrash(id);
   }
-  
+
   @Mutation(() => Page)
   async restorePageFromTrash(@Args('id', { type: () => Int }) id: number) {
     return this.pagesService.restoreFromTrash(id);
