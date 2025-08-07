@@ -1,0 +1,85 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Page {
+  id: Int!
+  title: String!
+  isDatabase: Boolean!
+  parentPageId: Int
+  workspaceId: Int!
+  ownerId: Int!
+  sortPosition: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  trashedAt: DateTime
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Workspace {
+  id: Int!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  pages: [Page!]
+}
+
+type WorkspacePaginated {
+  items: [Workspace!]!
+  total: Int!
+}
+
+type Query {
+  getPage(id: Int!): Page!
+  getPages(workspaceId: Int!, parentPageId: Int, search: String, isDatabase: Boolean, page: Int! = 1, pageSize: Int! = 10): [Page!]!
+  getSubPages(parentPageId: Int!): [Page!]!
+  trashedPages(workspaceId: Int!, ownerId: Int): [Page!]!
+  page(id: Int!): Page!
+  workspaces(query: WorkspaceQueryInput): WorkspacePaginated!
+  workspace(id: Int!): Workspace!
+}
+
+input WorkspaceQueryInput {
+  search: String
+  skip: Int
+  take: Int
+}
+
+type Mutation {
+  createPage(input: CreatePageInput!): Page!
+  updatePage(id: Int!, input: UpdatePageInput!): Page!
+  updatePageSortPosition(id: Int!, sortPosition: Int!): Page!
+  deletePage(id: Int!): Page!
+  movePageToTrash(id: Int!): Page!
+  restorePageFromTrash(id: Int!): Page!
+  createWorkspace(input: CreateWorkspaceInput!): Workspace!
+  updateWorkspace(input: UpdateWorkspaceInput!): Workspace!
+  removeWorkspace(id: Int!): Workspace!
+}
+
+input CreatePageInput {
+  title: String!
+  workspaceId: Int!
+  ownerId: Int!
+  parentPageId: Int
+  isDatabase: Boolean
+}
+
+input UpdatePageInput {
+  title: String
+  isDatabase: Boolean
+  parentPageId: Int
+}
+
+input CreateWorkspaceInput {
+  name: String!
+}
+
+input UpdateWorkspaceInput {
+  name: String
+  id: Int!
+}
