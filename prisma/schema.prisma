@@ -9,16 +9,17 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String   
-  name      String?
-  lastName  String?
-  photoUrl  String?
-  pages     Page[]   @relation("OwnerPages")
-  events    CalendarEvent[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int              @id @default(autoincrement())
+  email         String           @unique
+  password      String
+  name          String?
+  lastName      String?
+  photoUrl      String?
+  pages         Page[]           @relation("OwnerPages")
+  events        CalendarEvent[]
+  assignedTasks Task[]           @relation("UserAssignedTasks")
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 }
 
 model Workspace {
@@ -30,35 +31,58 @@ model Workspace {
 }
 
 model Page {
-  id             Int      @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   title          String
-  isDatabase     Boolean  @default(false)
+  isDatabase     Boolean         @default(false)
   parentPageId   Int?
-  parentPage     Page?     @relation("SubPages", fields: [parentPageId], references: [id])
-  subPages       Page[]    @relation("SubPages")
+  parentPage     Page?           @relation("SubPages", fields: [parentPageId], references: [id])
+  subPages       Page[]          @relation("SubPages")
   workspaceId    Int
-  workspace      Workspace @relation(fields: [workspaceId], references: [id])
+  workspace      Workspace       @relation(fields: [workspaceId], references: [id])
   contents       Content[]
   properties     Property[]
   propertyValues PropertyValue[]
   events         CalendarEvent[]
-  sortPosition   Int        @default(0)
-  inTrash        Boolean?   @default(false)
+  tasks          Task[]          // ✅ Tasks belonging to this page
+  sortPosition   Int             @default(0)
+  inTrash        Boolean?        @default(false)
   ownerId        Int
-  owner          User       @relation("OwnerPages", fields: [ownerId], references: [id])
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  owner          User            @relation("OwnerPages", fields: [ownerId], references: [id])
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model Task {
+  id          Int         @id @default(autoincrement())
+  title       String
+  description String?
+  status      TaskStatus  @default(todo)
+  dueDate     DateTime?
+  completedAt DateTime?
+  pageId      Int
+  page        Page        @relation(fields: [pageId], references: [id])
+  assigneeId  Int?
+  assignee    User?       @relation("UserAssignedTasks", fields: [assigneeId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum TaskStatus {
+  todo
+  in_progress
+  done
+  canceled
 }
 
 model Content {
-  id        Int       @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   type      ContentType
   data      Json
   order     Int
   pageId    Int
-  page      Page      @relation(fields: [pageId], references: [id])
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  page      Page       @relation(fields: [pageId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 enum ContentType {
@@ -75,7 +99,7 @@ model Property {
   type      PropertyType
   pageId    Int
   page      Page            @relation(fields: [pageId], references: [id])
-  values    PropertyValue[] 
+  values    PropertyValue[]
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
 }
@@ -89,7 +113,7 @@ enum PropertyType {
 }
 
 model PropertyValue {
-  id         Int     @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   pageId     Int
   propertyId Int
   value      Json
