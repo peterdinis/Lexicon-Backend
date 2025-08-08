@@ -41,6 +41,7 @@ model Page {
   workspace      Workspace       @relation(fields: [workspaceId], references: [id])
   contents       Content[]
   properties     Property[]
+  emoji          String?      
   propertyValues PropertyValue[]
   events         CalendarEvent[]
   tasks          Task[]

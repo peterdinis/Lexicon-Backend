@@ -28,6 +28,11 @@ export class CreatePageInput {
   @IsInt()
   parentPageId?: number;
 
+  @Field()
+  @IsOptional()
+  @IsString()
+  emoji?: string;
+
   @Field({ nullable: true })
   @IsOptional()
   @IsBoolean()

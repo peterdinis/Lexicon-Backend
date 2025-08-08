@@ -56,7 +56,12 @@ type CalendarEvent {
   updatedAt: DateTime!
 }
 
+type AppModel {
+  message: String!
+}
+
 type Query {
+  getHelloWorldList: [AppModel!]!
   getPage(id: Int!): Page!
   getPages(workspaceId: Int!, parentPageId: Int, search: String, isDatabase: Boolean, page: Int! = 1, pageSize: Int! = 10): [Page!]!
   getSubPages(parentPageId: Int!): [Page!]!
