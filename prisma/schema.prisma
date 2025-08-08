@@ -44,7 +44,7 @@ model Page {
   properties     Property[]
   propertyValues PropertyValue[]
   events         CalendarEvent[]
-  tasks          Task[]          // ✅ Tasks belonging to this page
+  tasks          Task[]
   sortPosition   Int             @default(0)
   inTrash        Boolean?        @default(false)
   ownerId        Int

@@ -31,4 +31,7 @@ export class Page {
 
   @Field(() => Date, { nullable: true })
   trashedAt?: Date;
+
+  @Field(() => [Page], { nullable: true })
+  subPages?: Page[];
 }
