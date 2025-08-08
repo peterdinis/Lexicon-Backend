@@ -274,4 +274,22 @@ export class PagesService {
       orderBy: { inTrash: 'desc' },
     });
   }
+
+  async getPageTree(workspaceId: number, parentPageId: number | null = null) {
+    const pages = await this.prisma.page.findMany({
+      where: {
+        workspaceId,
+        parentPageId,
+        inTrash: null,
+      },
+      orderBy: { sortPosition: 'asc' },
+    });
+
+    return Promise.all(
+      pages.map(async (page) => {
+        const children = await this.getPageTree(workspaceId, page.id);
+        return { ...page, subPages: children };
+      }),
+    );
+  }
 }
