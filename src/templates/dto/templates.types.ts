@@ -32,3 +32,16 @@ export class CreateTemplateInput {
   @Field(() => [Block])
   blocks: Block[];
 }
+
+
+@InputType()
+export class UpdateTemplateInput {
+  @Field()
+  id: string;
+
+  @Field()
+  title: string;
+
+  @Field(() => [Block])
+  blocks: Block[];
+}

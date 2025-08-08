@@ -6,21 +6,17 @@ import { templates as predefinedTemplates } from './data/templates.data';
 export class TemplatesService {
   constructor(private prisma: PrismaService) {}
 
-  // Return combined list of template metadata
   async getAllTemplates() {
-    // Get DB templates metadata
     const dbTemplates = await this.prisma.template.findMany({
       select: { id: true, title: true, createdBy: true },
     });
 
-    // Map predefined templates metadata
     const predefs = Object.entries(predefinedTemplates).map(([id, tpl]) => ({
       id,
       title: tpl.title,
       isCustom: false,
     }));
 
-    // Map DB templates metadata
     const customs = dbTemplates.map((tpl) => ({
       id: tpl.id,
       title: tpl.title,
@@ -30,14 +26,11 @@ export class TemplatesService {
     return [...predefs, ...customs];
   }
 
-  // Get template details by ID, check predefined first
   async getTemplateById(id: string) {
-    // If matches predefined
     if (predefinedTemplates[id]) {
       return { id, ...predefinedTemplates[id], isCustom: false };
     }
 
-    // Else look in DB
     const dbTemplate = await this.prisma.template.findUnique({
       where: { id },
     });
@@ -46,7 +39,6 @@ export class TemplatesService {
     return { ...dbTemplate, isCustom: true };
   }
 
-  // Create new custom template
   async createCustomTemplate(userId: string, title: string, blocks: any[]) {
     return this.prisma.template.create({
       data: {
@@ -56,4 +48,29 @@ export class TemplatesService {
       },
     });
   }
+
+
+
+
+async updateCustomTemplate(userId: string, templateId: string, title: string, blocks: any[]) {
+  const template = await this.prisma.template.findUnique({
+    where: { id: templateId },
+  });
+
+  if (!template) {
+    throw new NotFoundException(`Template '${templateId}' not found`);
+  }
+
+  if (template.createdBy !== userId) {
+    throw new Error('You are not allowed to edit this template');
+  }
+
+  return this.prisma.template.update({
+    where: { id: templateId },
+    data: {
+      title,
+      blocks,
+    },
+  });
+}
 }
