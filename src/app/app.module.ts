@@ -34,7 +34,7 @@ import { CalendarModule } from 'src/calendar/calendar.module';
     WorkspacesModule,
     TasksModule,
     NotificationModule,
-    CalendarModule
+    CalendarModule,
   ],
   providers: [
     {
