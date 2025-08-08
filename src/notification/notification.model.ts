@@ -1,11 +1,11 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 
 @ObjectType()
 export class Notification {
   @Field(() => ID)
   id: string;
 
-  @Field(() => Number)
+  @Field(() => Int)
   userId: number;
 
   @Field()
@@ -14,7 +14,7 @@ export class Notification {
   @Field()
   title: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   description: string | null;
 
   @Field()

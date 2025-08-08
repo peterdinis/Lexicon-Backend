@@ -33,7 +33,7 @@ export class NotificationsService {
     userId: string;
     type: string;
     title: string;
-    description?: string;
+    description: string;
   }) {
     const userId = this.parseUserId(data.userId);
 
