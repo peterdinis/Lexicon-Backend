@@ -19,6 +19,9 @@ import { TemplatesModule } from 'src/templates/templates.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       graphiql: true,
+      buildSchemaOptions: {
+        dateScalarMode: "timestamp"
+      },
       installSubscriptionHandlers: true,
       context: ({ req, connection }) => {
         if (connection) {
