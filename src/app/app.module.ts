@@ -12,6 +12,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { NotificationModule } from 'src/notification/notification.module';
 import { CalendarModule } from 'src/calendar/calendar.module';
 import { AppModelResolver } from './app.resolver';
+import { TemplatesModule } from 'src/templates/templates.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { AppModelResolver } from './app.resolver';
       useClass: LoggedInterceptor,
     },
     AppModelResolver,
+    TemplatesModule,
   ],
 })
 export class AppModule {}
