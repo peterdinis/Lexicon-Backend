@@ -33,8 +33,8 @@ import { CalendarModule } from 'src/calendar/calendar.module';
     PagesModule,
     WorkspacesModule,
     TasksModule,
-    NotificationModule,
     CalendarModule,
+    NotificationModule,
   ],
   providers: [
     {

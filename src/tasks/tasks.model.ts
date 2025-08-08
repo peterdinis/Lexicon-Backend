@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { TaskStatus } from 'generated/prisma';
+import { TaskStatus } from '@prisma/client';
 
 @ObjectType()
 export class Task {

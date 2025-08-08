@@ -13,6 +13,7 @@ type Page {
   createdAt: DateTime!
   updatedAt: DateTime!
   trashedAt: DateTime
+  subPages: [Page!]
 }
 
 """
@@ -33,14 +34,40 @@ type WorkspacePaginated {
   total: Int!
 }
 
+type Notification {
+  id: ID!
+  userId: Int!
+  type: String!
+  title: String!
+  description: String
+  isRead: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CalendarEvent {
+  id: Int!
+  title: String!
+  start: DateTime!
+  end: DateTime!
+  pageId: Int!
+  userId: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   getPage(id: Int!): Page!
   getPages(workspaceId: Int!, parentPageId: Int, search: String, isDatabase: Boolean, page: Int! = 1, pageSize: Int! = 10): [Page!]!
   getSubPages(parentPageId: Int!): [Page!]!
   trashedPages(workspaceId: Int!, ownerId: Int): [Page!]!
   page(id: Int!): Page!
+  pageTree(workspaceId: Int!, parentPageId: Int): [Page!]!
   workspaces(query: WorkspaceQueryInput): WorkspacePaginated!
   workspace(id: Int!): Workspace!
+  events(userId: Int, pageId: Int): [CalendarEvent!]!
+  event(id: Int!): CalendarEvent!
+  myNotifications: [Notification!]!
 }
 
 input WorkspaceQueryInput {
@@ -56,9 +83,15 @@ type Mutation {
   deletePage(id: Int!): Page!
   movePageToTrash(id: Int!): Page!
   restorePageFromTrash(id: Int!): Page!
+  movePage(id: Int!, newParentId: Int): Page!
   createWorkspace(input: CreateWorkspaceInput!): Workspace!
   updateWorkspace(input: UpdateWorkspaceInput!): Workspace!
   removeWorkspace(id: Int!): Workspace!
+  createEvent(input: CreateEventInput!): CalendarEvent!
+  updateEvent(input: UpdateEventInput!): CalendarEvent!
+  deleteEvent(id: Int!): CalendarEvent!
+  markNotificationRead(id: String!): Notification!
+  markAllNotificationsRead: Boolean!
 }
 
 input CreatePageInput {
@@ -82,4 +115,25 @@ input CreateWorkspaceInput {
 input UpdateWorkspaceInput {
   name: String
   id: Int!
+}
+
+input CreateEventInput {
+  title: String!
+  start: DateTime!
+  end: DateTime!
+  userId: Int!
+  pageId: Int!
+}
+
+input UpdateEventInput {
+  title: String
+  start: DateTime
+  end: DateTime
+  userId: Int
+  pageId: Int
+  id: Int!
+}
+
+type Subscription {
+  notificationCreated: Notification!
 }
