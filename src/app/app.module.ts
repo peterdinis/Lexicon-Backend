@@ -10,6 +10,7 @@ import { TasksModule } from 'src/tasks/tasks.module';
 import { LoggedInterceptor } from 'src/shared/interceptors/logged.interceptor';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { NotificationModule } from 'src/notification/notification.module';
+import { CalendarModule } from 'src/calendar/calendar.module';
 
 @Module({
   imports: [
@@ -19,10 +20,8 @@ import { NotificationModule } from 'src/notification/notification.module';
       installSubscriptionHandlers: true,
       context: ({ req, connection }) => {
         if (connection) {
-          // Subscriptions context
           return { user: connection.context.user };
         }
-        // HTTP request context
         return { user: req.user };
       },
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -35,6 +34,7 @@ import { NotificationModule } from 'src/notification/notification.module';
     WorkspacesModule,
     TasksModule,
     NotificationModule,
+    CalendarModule
   ],
   providers: [
     {
