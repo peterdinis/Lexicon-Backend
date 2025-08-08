@@ -1,4 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
+import { TaskStatus } from '@prisma/client';
 import {
   IsOptional,
   IsString,
@@ -6,7 +7,6 @@ import {
   IsDateString,
   IsInt,
 } from 'class-validator';
-import { TaskStatus } from 'generated/prisma';
 
 @InputType()
 export class CreateTaskInput {
