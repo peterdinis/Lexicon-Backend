@@ -89,7 +89,7 @@ export class PagesResolver {
     newParentId?: number,
   ) {
     return this.pagesService.updatePage(id, {
-      parentPageId: newParentId ?? undefined, // ✅ použijeme undefined namiesto null
+      parentPageId: newParentId ?? undefined,
     });
   }
 }
