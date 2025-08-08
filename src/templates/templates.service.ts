@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { templates as predefinedTemplates } from './templates.data';
+import { templates as predefinedTemplates } from './data/templates.data';
 
 @Injectable()
 export class TemplatesService {

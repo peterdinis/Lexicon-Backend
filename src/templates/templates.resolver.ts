@@ -1,9 +1,9 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { TemplatesService } from './templates.service';
-import { Template, CreateTemplateInput } from './templates.types';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '../auth/gql-auth.guard'; 
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { GqlAuthGuard } from 'src/auth/guard/gql-auth.guard';
+import { Template, CreateTemplateInput } from './dto/templates.types';
 
 @Resolver(() => Template)
 export class TemplatesResolver {
@@ -19,12 +19,16 @@ export class TemplatesResolver {
     return this.templatesService.getTemplateById(id);
   }
 
-  @UseGuards(GqlAuthGuard) // protect mutation
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Template)
   async createCustomTemplate(
     @CurrentUser('id') userId: string,
     @Args('input') input: CreateTemplateInput,
   ) {
-    return this.templatesService.createCustomTemplate(userId, input.title, input.blocks);
+    return this.templatesService.createCustomTemplate(
+      userId,
+      input.title,
+      input.blocks,
+    );
   }
 }

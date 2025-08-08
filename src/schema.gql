@@ -60,6 +60,11 @@ type AppModel {
   message: String!
 }
 
+type Block {
+  type: String!
+  content: String!
+}
+
 type Query {
   getHelloWorldList: [AppModel!]!
   getPage(id: Int!): Page!
@@ -104,6 +109,7 @@ input CreatePageInput {
   workspaceId: Int!
   ownerId: Int!
   parentPageId: Int
+  emoji: String!
   isDatabase: Boolean
 }
 
