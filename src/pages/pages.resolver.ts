@@ -72,4 +72,24 @@ export class PagesResolver {
   async page(@Args('id', { type: () => Int }) id: number) {
     return this.pagesService.getPageById(id);
   }
+
+  @Query(() => [Page])
+  async pageTree(
+    @Args('workspaceId', { type: () => Int }) workspaceId: number,
+    @Args('parentPageId', { type: () => Int, nullable: true })
+    parentPageId?: number,
+  ) {
+    return this.pagesService.getPageTree(workspaceId, parentPageId ?? null);
+  }
+
+  @Mutation(() => Page)
+  async movePage(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('newParentId', { type: () => Int, nullable: true })
+    newParentId?: number,
+  ) {
+    return this.pagesService.updatePage(id, {
+      parentPageId: newParentId ?? undefined, // ✅ použijeme undefined namiesto null
+    });
+  }
 }
