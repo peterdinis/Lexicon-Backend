@@ -44,7 +44,7 @@ import { TemplatesModule } from 'src/templates/templates.module';
       useClass: LoggedInterceptor,
     },
     AppModelResolver,
-    TemplatesModule
+    TemplatesModule,
   ],
 })
 export class AppModule {}
