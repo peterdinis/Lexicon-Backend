@@ -18,11 +18,11 @@ import { TemplatesModule } from 'src/templates/templates.module';
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      graphiql: true,
+      playground: true,
+      installSubscriptionHandlers: true,
       buildSchemaOptions: {
         dateScalarMode: "timestamp"
       },
-      installSubscriptionHandlers: true,
       context: ({ req, connection }) => {
         if (connection) {
           return { user: connection.context.user };

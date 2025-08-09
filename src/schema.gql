@@ -10,22 +10,22 @@ type Page {
   workspaceId: Int!
   ownerId: Int!
   sortPosition: Int!
-  createdAt: Timestamp!
-  updatedAt: Timestamp!
-  trashedAt: Timestamp
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  trashedAt: DateTime
   subPages: [Page!]
 }
 
 """
-`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
-scalar Timestamp
+scalar DateTime
 
 type Workspace {
   id: Int!
   name: String!
-  createdAt: Timestamp!
-  updatedAt: Timestamp!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   pages: [Page!]
 }
 
@@ -41,19 +41,19 @@ type Notification {
   title: String!
   description: String
   isRead: Boolean!
-  createdAt: Timestamp!
-  updatedAt: Timestamp!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type CalendarEvent {
   id: Int!
   title: String!
-  start: Timestamp!
-  end: Timestamp!
+  start: DateTime!
+  end: DateTime!
   pageId: Int!
   userId: Int!
-  createdAt: Timestamp!
-  updatedAt: Timestamp!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type AppModel {
@@ -130,16 +130,16 @@ input UpdateWorkspaceInput {
 
 input CreateEventInput {
   title: String!
-  start: Timestamp!
-  end: Timestamp!
+  start: DateTime!
+  end: DateTime!
   userId: Int!
   pageId: Int!
 }
 
 input UpdateEventInput {
   title: String
-  start: Timestamp
-  end: Timestamp
+  start: DateTime
+  end: DateTime
   userId: Int
   pageId: Int
   id: Int!

@@ -33,7 +33,6 @@ export class CreateTemplateInput {
   blocks: Block[];
 }
 
-
 @InputType()
 export class UpdateTemplateInput {
   @Field()
