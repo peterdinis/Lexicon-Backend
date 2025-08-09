@@ -9,13 +9,21 @@ interface NotificationEvents {
     notificationCreated: Notification;
     userId: number;
   };
+  notificationRead: {
+    notificationRead: Notification;
+    userId: number;
+  };
+  notificationDeleted: {
+    notificationDeleted: Notification;
+    userId: number;
+  };
 }
 
 @Injectable()
 export class NotificationsService {
   private pubSub = new PubSub<NotificationEvents>();
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   getPubSub() {
     return this.pubSub;
@@ -77,5 +85,19 @@ export class NotificationsService {
       data: { isRead: true },
     });
     return result.count;
+  }
+
+  async deleteNotification(notificationId: string) {
+    const notification = await this.prisma.notification.update({
+      where: { id: notificationId },
+      data: { isDeleted: true },
+    });
+
+    this.pubSub.publish('notificationDeleted', {
+      notificationDeleted: notification,
+      userId: notification.userId,
+    });
+
+    return notification;
   }
 }

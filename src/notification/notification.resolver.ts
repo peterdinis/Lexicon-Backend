@@ -16,7 +16,7 @@ const pubSub = new PubSub();
 
 @Resolver(() => Notification)
 export class NotificationsResolver {
-  constructor(private notificationsService: NotificationsService) {}
+  constructor(private notificationsService: NotificationsService) { }
 
   @Query(() => [Notification])
   @UseGuards(GqlAuthGuard)
@@ -51,5 +51,14 @@ export class NotificationsResolver {
   @UseGuards(GqlAuthGuard)
   notificationCreated(@Context('user') user: { id: number }) {
     return pubSub.asyncIterableIterator('notificationCreated');
+  }
+
+  @Mutation(() => Notification)
+  @UseGuards(GqlAuthGuard)
+  async deleteNotification(
+    @Args('id') id: string,
+    @Context('user') user: { id: number },
+  ) {
+    return this.notificationsService.deleteNotification(id);
   }
 }
