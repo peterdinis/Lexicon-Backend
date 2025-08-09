@@ -3,11 +3,15 @@ import { TemplatesService } from './templates.service';
 import { UseGuards } from '@nestjs/common';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from 'src/auth/guard/gql-auth.guard';
-import { Template, CreateTemplateInput, UpdateTemplateInput } from './dto/templates.types';
+import {
+  Template,
+  CreateTemplateInput,
+  UpdateTemplateInput,
+} from './dto/templates.types';
 
 @Resolver(() => Template)
 export class TemplatesResolver {
-  constructor(private templatesService: TemplatesService) { }
+  constructor(private templatesService: TemplatesService) {}
 
   @Query(() => [Template])
   getTemplates() {

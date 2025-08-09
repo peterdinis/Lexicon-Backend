@@ -49,28 +49,30 @@ export class TemplatesService {
     });
   }
 
+  async updateCustomTemplate(
+    userId: string,
+    templateId: string,
+    title: string,
+    blocks: any[],
+  ) {
+    const template = await this.prisma.template.findUnique({
+      where: { id: templateId },
+    });
 
+    if (!template) {
+      throw new NotFoundException(`Template '${templateId}' not found`);
+    }
 
+    if (template.createdBy !== userId) {
+      throw new Error('You are not allowed to edit this template');
+    }
 
-async updateCustomTemplate(userId: string, templateId: string, title: string, blocks: any[]) {
-  const template = await this.prisma.template.findUnique({
-    where: { id: templateId },
-  });
-
-  if (!template) {
-    throw new NotFoundException(`Template '${templateId}' not found`);
+    return this.prisma.template.update({
+      where: { id: templateId },
+      data: {
+        title,
+        blocks,
+      },
+    });
   }
-
-  if (template.createdBy !== userId) {
-    throw new Error('You are not allowed to edit this template');
-  }
-
-  return this.prisma.template.update({
-    where: { id: templateId },
-    data: {
-      title,
-      blocks,
-    },
-  });
-}
 }
