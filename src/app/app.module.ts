@@ -20,6 +20,9 @@ import { TemplatesModule } from 'src/templates/templates.module';
       driver: ApolloDriver,
       playground: true,
       installSubscriptionHandlers: true,
+      buildSchemaOptions: {
+        dateScalarMode: "timestamp"
+      },
       context: ({ req, connection }) => {
         if (connection) {
           return { user: connection.context.user };
