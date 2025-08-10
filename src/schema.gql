@@ -94,6 +94,8 @@ type Mutation {
   movePageToTrash(id: Int!): Page!
   restorePageFromTrash(id: Int!): Page!
   movePage(id: Int!, newParentId: Int): Page!
+  publishPage(id: Int!): Page!
+  unpublishPage(id: Int!): Page!
   createWorkspace(input: CreateWorkspaceInput!): Workspace!
   updateWorkspace(input: UpdateWorkspaceInput!): Workspace!
   removeWorkspace(id: Int!): Workspace!
