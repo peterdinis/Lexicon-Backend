@@ -7,7 +7,7 @@ import { Page } from './pages.model';
 
 @Resolver(() => Page)
 export class PagesResolver {
-  constructor(private readonly pagesService: PagesService) {}
+  constructor(private readonly pagesService: PagesService) { }
 
   @Mutation(() => Page)
   createPage(@Args('input') input: CreatePageInput) {
@@ -91,5 +91,15 @@ export class PagesResolver {
     return this.pagesService.updatePage(id, {
       parentPageId: newParentId ?? undefined,
     });
+  }
+
+  @Mutation(() => Page)
+  publishPage(@Args('id', { type: () => Int }) id: number) {
+    return this.pagesService.publishPage(id);
+  }
+
+  @Mutation(() => Page)
+  unpublishPage(@Args('id', { type: () => Int }) id: number) {
+    return this.pagesService.unpublishPage(id);
   }
 }

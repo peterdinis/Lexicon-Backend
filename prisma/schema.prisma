@@ -43,10 +43,12 @@ model Page {
   properties     Property[]
   emoji          String?      
   propertyValues PropertyValue[]
+  publicUrl      String          @default("")
   events         CalendarEvent[]
   tasks          Task[]
   sortPosition   Int             @default(0)
   inTrash        Boolean?        @default(false)
+  inPublished    Boolean?        @default(false)
   ownerId        Int
   owner          User            @relation("OwnerPages", fields: [ownerId], references: [id])
   createdAt      DateTime        @default(now())
