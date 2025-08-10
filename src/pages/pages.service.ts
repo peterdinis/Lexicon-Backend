@@ -7,10 +7,11 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePageInput } from './dto/create-page.input';
 import { UpdatePageInput } from './dto/update-page.input';
+import { generateRandomToken } from 'src/shared/custom/genearteRandomToken';
 
 @Injectable()
 export class PagesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async createPage(data: CreatePageInput) {
     const { title, workspaceId, ownerId, parentPageId, isDatabase } = data;
@@ -294,28 +295,37 @@ export class PagesService {
   }
 
   async publishPage(id: number) {
-  const page = await this.getPageById(id);
+    const page = await this.getPageById(id);
 
-  if (page.inPublished) {
-    throw new BadRequestException('Page is already published.');
+    if (page.inPublished) {
+      throw new BadRequestException('Page is already published.');
+    }
+
+    // Vytvorenie verejnej URL napríklad ako "http://yourdomain.com/public/{unikátnyToken}"
+    // Tu môžeš použiť napríklad slug alebo generovať náhodný token
+    const publicToken = generateRandomToken(); // implementuj funkciu alebo použij knižnicu ako nanoid
+
+    const publicUrl = `http://yourdomain.com/public/${publicToken}`;
+
+    return this.prisma.page.update({
+      where: { id },
+      data: {
+        inPublished: true,
+        publicUrl,
+      },
+    });
   }
 
-  return this.prisma.page.update({
-    where: { id },
-    data: { inPublished: true },
-  });
-}
+  async unpublishPage(id: number) {
+    const page = await this.getPageById(id);
 
-async unpublishPage(id: number) {
-  const page = await this.getPageById(id);
+    if (!page.inPublished) {
+      throw new BadRequestException('Page is not published.');
+    }
 
-  if (!page.inPublished) {
-    throw new BadRequestException('Page is not published.');
+    return this.prisma.page.update({
+      where: { id },
+      data: { inPublished: false },
+    });
   }
-
-  return this.prisma.page.update({
-    where: { id },
-    data: { inPublished: false },
-  });
-}
 }

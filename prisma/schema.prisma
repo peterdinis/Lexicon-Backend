@@ -43,6 +43,7 @@ model Page {
   properties     Property[]
   emoji          String?      
   propertyValues PropertyValue[]
+  publicUrl      String          @default("")
   events         CalendarEvent[]
   tasks          Task[]
   sortPosition   Int             @default(0)
