@@ -102,6 +102,7 @@ type Mutation {
   deleteEvent(id: Int!): CalendarEvent!
   markNotificationRead(id: String!): Notification!
   markAllNotificationsRead: Boolean!
+  deleteNotification(id: String!): Notification!
 }
 
 input CreatePageInput {
