@@ -292,4 +292,30 @@ export class PagesService {
       }),
     );
   }
+
+  async publishPage(id: number) {
+  const page = await this.getPageById(id);
+
+  if (page.inPublished) {
+    throw new BadRequestException('Page is already published.');
+  }
+
+  return this.prisma.page.update({
+    where: { id },
+    data: { inPublished: true },
+  });
+}
+
+async unpublishPage(id: number) {
+  const page = await this.getPageById(id);
+
+  if (!page.inPublished) {
+    throw new BadRequestException('Page is not published.');
+  }
+
+  return this.prisma.page.update({
+    where: { id },
+    data: { inPublished: false },
+  });
+}
 }
