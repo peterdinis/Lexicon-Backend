@@ -301,10 +301,9 @@ export class PagesService {
       throw new BadRequestException('Page is already published.');
     }
 
-    // Vytvorenie verejnej URL napríklad ako "http://yourdomain.com/public/{unikátnyToken}"
-    // Tu môžeš použiť napríklad slug alebo generovať náhodný token
-    const publicToken = generateRandomToken(); // implementuj funkciu alebo použij knižnicu ako nanoid
+    const publicToken = generateRandomToken();
 
+    // TODO: Later change domain
     const publicUrl = `http://yourdomain.com/public/${publicToken}`;
 
     return this.prisma.page.update({
