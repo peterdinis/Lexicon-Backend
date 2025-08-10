@@ -11,6 +11,9 @@ importers:
       '@apollo/server':
         specifier: ^4.12.2
         version: 4.12.2(graphql@16.11.0)
+      '@faker-js/faker':
+        specifier: ^9.9.0
+        version: 9.9.0
       '@nestjs/apollo':
         specifier: ^13.1.0
         version: 13.1.0(@apollo/server@4.12.2(graphql@16.11.0))(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.5)(@nestjs/graphql@13.1.0(@nestjs/common@11.1.5(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.5)(class-transformer@0.5.1)(class-validator@0.14.2)(graphql@16.11.0)(reflect-metadata@0.2.2))(graphql@16.11.0)
@@ -44,6 +47,9 @@ importers:
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
+      faker-js:
+        specifier: ^1.0.0
+        version: 1.0.0
       graphql:
         specifier: ^16.11.0
         version: 16.11.0
@@ -655,6 +661,10 @@ packages:
   '@eslint/plugin-kit@0.3.4':
     resolution: {integrity: sha512-Ul5l+lHEcw3L5+k8POx6r74mxEYKG5kOb6Xpy2gCRW6zweT6TEhAf8vhxGgjhqrd/VO/Dirhsb+1hNpD1ue9hw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@faker-js/faker@9.9.0':
+    resolution: {integrity: sha512-OEl393iCOoo/z8bMezRlJu+GlRGlsKbUAN7jKB6LhnKoqKve5DXRpalbItIIcwnCjs1k/FOPjFzcA6Qn+H+YbA==}
+    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   '@graphql-tools/merge@8.4.2':
     resolution: {integrity: sha512-XbrHAaj8yDuINph+sAfuq3QCZ/tKblrTLOpirK0+CAgNlZUCHs0Fa+xtMUURgwCVThLle1AF7svJCxFizygLsw==}
@@ -2479,6 +2489,9 @@ packages:
   external-editor@3.1.0:
     resolution: {integrity: sha512-hMQ4CX1p1izmuLYyZqLMO/qGNw10wSv9QDCPfzXfyFrOaCSSoRfqE1Kf1s5an66J5JZC62NewG+mK49jOCtQew==}
     engines: {node: '>=4'}
+
+  faker-js@1.0.0:
+    resolution: {integrity: sha512-kaToadbN63LWhHjl69pqG+YHlxAK0aZAPhQDUpVP7v7+RG//ZpK0OzXjCwaAQq98awOii0WSHxtJmIz0X7/UqQ==}
 
   fast-check@3.23.2:
     resolution: {integrity: sha512-h5+1OzzfCC3Ef7VbtKdcv7zsstUQwUDlYpUTvjeUsJAssPgLn7QzbboPtL5ro04Mq0rPOsMzl7q5hIbRs2wD1A==}
@@ -4905,6 +4918,8 @@ snapshots:
       '@eslint/core': 0.15.1
       levn: 0.4.1
 
+  '@faker-js/faker@9.9.0': {}
+
   '@graphql-tools/merge@8.4.2(graphql@16.11.0)':
     dependencies:
       '@graphql-tools/utils': 9.2.1(graphql@16.11.0)
@@ -7044,6 +7059,8 @@ snapshots:
       chardet: 0.7.0
       iconv-lite: 0.4.24
       tmp: 0.0.33
+
+  faker-js@1.0.0: {}
 
   fast-check@3.23.2:
     dependencies:
