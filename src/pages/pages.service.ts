@@ -8,6 +8,10 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreatePageInput } from './dto/create-page.input';
 import { UpdatePageInput } from './dto/update-page.input';
 import { generateRandomToken } from 'src/shared/custom/genearteRandomToken';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubsub = new PubSub();
+const DOCUMENT_UPDATED = 'DOCUMENT_UPDATED';
 
 @Injectable()
 export class PagesService {
@@ -327,4 +331,35 @@ export class PagesService {
       data: { inPublished: false },
     });
   }
+
+  async documentCollaboration(userId: string, documentId: string, content: string) {
+  // Overenie práv - rovnaké ako máš
+
+  // Update dokumentu
+  const updatedDoc = await this.prisma.page.update({
+    where: { id: documentId },
+    data: { content, updatedAt: new Date() },
+  });
+
+  // Uloženie histórie
+  await this.prisma.pageHistory.create({
+    data: {
+      pageId: documentId,
+      userId,
+      change: JSON.stringify({ content }),
+    },
+  });
+
+  // Publish update pre odberateľov
+  pubsub.publish(DOCUMENT_UPDATED, {
+    documentUpdated: {
+      documentId,
+      content,
+      updatedAt: updatedDoc.updatedAt,
+      userId,
+    },
+  });
+
+  return updatedDoc;
+}
 }

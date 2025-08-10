@@ -8,18 +8,33 @@ datasource db {
 }
 
 model User {
-  id            Int              @id @default(autoincrement())
-  email         String           @unique
-  password      String
-  name          String?
-  lastName      String?
-  photoUrl      String?
-  notifications Notification[]
-  pages         Page[]           @relation("OwnerPages")
-  events        CalendarEvent[]
-  assignedTasks Task[]           @relation("UserAssignedTasks")
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
+  id                 Int                @id @default(autoincrement())
+  email              String             @unique
+  password           String
+  name               String?
+  lastName           String?
+  photoUrl           String?
+  notifications      Notification[]
+  pages              Page[]             @relation("OwnerPages")
+  events             CalendarEvent[]
+  assignedTasks      Task[]             @relation("UserAssignedTasks")
+  pageCollaborations PageCollaborator[]
+  pageHistories      PageHistory[]
+  templates          Template[]         @relation("UserTemplates") // len meno vzťahu
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+}
+
+model Template {
+  id        String   @id @default(cuid())
+  title     String
+  blocks    Json // Store blocks as JSON array
+  createdBy Int
+  creator   User     @relation("UserTemplates", fields: [createdBy], references: [id]) // meno vzťahu sa musí zhodovať
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdBy])
 }
 
 model Workspace {
@@ -31,43 +46,70 @@ model Workspace {
 }
 
 model Page {
-  id             Int             @id @default(autoincrement())
+  id             Int                @id @default(autoincrement())
   title          String
-  isDatabase     Boolean         @default(false)
+  isDatabase     Boolean            @default(false)
   parentPageId   Int?
-  parentPage     Page?           @relation("SubPages", fields: [parentPageId], references: [id])
-  subPages       Page[]          @relation("SubPages")
+  parentPage     Page?              @relation("SubPages", fields: [parentPageId], references: [id])
+  subPages       Page[]             @relation("SubPages")
   workspaceId    Int
-  workspace      Workspace       @relation(fields: [workspaceId], references: [id])
+  workspace      Workspace          @relation(fields: [workspaceId], references: [id])
   contents       Content[]
   properties     Property[]
-  emoji          String?      
+  emoji          String?
   propertyValues PropertyValue[]
-  publicUrl      String          @default("")
+  publicUrl      String             @default("")
   events         CalendarEvent[]
   tasks          Task[]
-  sortPosition   Int             @default(0)
-  inTrash        Boolean?        @default(false)
-  inPublished    Boolean?        @default(false)
+  sortPosition   Int                @default(0)
+  inTrash        Boolean?           @default(false)
+  inPublished    Boolean?           @default(false)
   ownerId        Int
-  owner          User            @relation("OwnerPages", fields: [ownerId], references: [id])
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  owner          User               @relation("OwnerPages", fields: [ownerId], references: [id])
+  collaborators  PageCollaborator[]
+  histories      PageHistory[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+}
+
+model PageCollaborator {
+  id     String           @id @default(cuid())
+  userId Int
+  pageId Int
+  role   CollaboratorRole @default(VIEWER)
+  user   User             @relation(fields: [userId], references: [id])
+  page   Page             @relation(fields: [pageId], references: [id])
+}
+
+model PageHistory {
+  id        String   @id @default(cuid())
+  pageId    Int
+  userId    Int
+  change    String // JSON or string diff
+  createdAt DateTime @default(now())
+  page      Page     @relation(fields: [pageId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+enum CollaboratorRole {
+  VIEWER
+  EDITOR
+  OWNER
 }
 
 model Task {
-  id          Int         @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   title       String
   description String?
-  status      TaskStatus  @default(todo)
+  status      TaskStatus @default(todo)
   dueDate     DateTime?
   completedAt DateTime?
   pageId      Int
-  page        Page        @relation(fields: [pageId], references: [id])
+  page        Page       @relation(fields: [pageId], references: [id])
   assigneeId  Int?
-  assignee    User?       @relation("UserAssignedTasks", fields: [assigneeId], references: [id])
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  assignee    User?      @relation("UserAssignedTasks", fields: [assigneeId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 enum TaskStatus {
@@ -78,14 +120,14 @@ enum TaskStatus {
 }
 
 model Content {
-  id        Int        @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   type      ContentType
   data      Json
   order     Int
   pageId    Int
-  page      Page       @relation(fields: [pageId], references: [id])
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  page      Page        @relation(fields: [pageId], references: [id])
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 }
 
 enum ContentType {
@@ -143,22 +185,11 @@ model Notification {
   id          String   @id @default(cuid())
   userId      Int
   user        User     @relation(fields: [userId], references: [id])
-  type        String   // e.g. "MESSAGE", "FRIEND_REQUEST", "SYSTEM"
+  type        String // e.g. "MESSAGE", "FRIEND_REQUEST", "SYSTEM"
   title       String
   description String?
   isRead      Boolean  @default(false)
   isDeleted   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-}
-
-model Template {
-  id        String   @id @default(cuid())
-  title     String
-  blocks    Json     // Store blocks as JSON array
-  createdBy String   // userId of creator
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([createdBy])
 }
