@@ -332,34 +332,75 @@ export class PagesService {
     });
   }
 
-  async documentCollaboration(userId: string, documentId: string, content: string) {
-  // Overenie práv - rovnaké ako máš
+  async documentCollaboration(
+    userId: number,
+    pageId: number,
+    contents: { type: string; data: any; order: number }[]
+  ) {
+    // 1️⃣ Check if page exists & user has access
+    const page = await this.prisma.page.findUnique({
+      where: { id: pageId },
+      include: {
+        collaborators: true,
+        owner: true,
+      },
+    });
 
-  // Update dokumentu
-  const updatedDoc = await this.prisma.page.update({
-    where: { id: documentId },
-    data: { content, updatedAt: new Date() },
-  });
+    if (!page) {
+      throw new NotFoundException(`Page with ID ${pageId} not found.`);
+    }
 
-  // Uloženie histórie
-  await this.prisma.pageHistory.create({
-    data: {
-      pageId: documentId,
-      userId,
-      change: JSON.stringify({ content }),
-    },
-  });
+    const isOwner = page.ownerId === userId;
+    const isCollaborator = page.collaborators.some(
+      (c) =>
+        c.userId === userId &&
+        (c.role === 'EDITOR' || c.role === 'OWNER')
+    );
 
-  // Publish update pre odberateľov
-  pubsub.publish(DOCUMENT_UPDATED, {
-    documentUpdated: {
-      documentId,
-      content,
-      updatedAt: updatedDoc.updatedAt,
-      userId,
-    },
-  });
+    if (!isOwner && !isCollaborator) {
+      throw new BadRequestException(`You do not have permission to edit this page.`);
+    }
 
-  return updatedDoc;
-}
+    // 2️⃣ Transaction: replace contents + save history
+    const updatedPage = await this.prisma.$transaction(async (tx) => {
+      // Delete old contents
+      await tx.content.deleteMany({ where: { pageId } });
+
+      // Create new contents
+      await tx.content.createMany({
+        data: contents.map((c, index) => ({
+          type: c.type as any,
+          data: c.data,
+          order: c.order ?? index,
+          pageId,
+        })),
+      });
+
+      // Save history
+      await tx.pageHistory.create({
+        data: {
+          pageId,
+          userId,
+          change: JSON.stringify({ contents }),
+        },
+      });
+
+      return tx.page.update({
+        where: { id: pageId },
+        data: { updatedAt: new Date() },
+        include: { contents: true },
+      });
+    });
+    
+    pubsub.publish(DOCUMENT_UPDATED, {
+      documentUpdated: {
+        pageId,
+        contents: updatedPage.contents,
+        updatedAt: updatedPage.updatedAt,
+        userId,
+      },
+    });
+
+    return updatedPage;
+  }
 }
