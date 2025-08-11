@@ -44,7 +44,7 @@ export class TemplatesService {
       data: {
         title,
         blocks,
-        createdBy: userId,
+        createdBy: Number(userId)
       },
     });
   }
@@ -63,7 +63,7 @@ export class TemplatesService {
       throw new NotFoundException(`Template '${templateId}' not found`);
     }
 
-    if (template.createdBy !== userId) {
+    if (template.createdBy !== Number(userId)) {
       throw new Error('You are not allowed to edit this template');
     }
 
