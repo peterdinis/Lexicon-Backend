@@ -13,6 +13,7 @@ import { NotificationModule } from 'src/notification/notification.module';
 import { CalendarModule } from 'src/calendar/calendar.module';
 import { AppModelResolver } from './app.resolver';
 import { TemplatesModule } from 'src/templates/templates.module';
+import { PageCollaborationModule } from 'src/page-collaboration/page-collaboration.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { TemplatesModule } from 'src/templates/templates.module';
     },
     AppModelResolver,
     TemplatesModule,
+    PageCollaborationModule
   ],
 })
 export class AppModule {}
