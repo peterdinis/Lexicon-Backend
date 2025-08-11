@@ -4,7 +4,6 @@ import { CreatePageInput } from './dto/create-page.input';
 import { UpdatePageInput } from './dto/update-page.input';
 import { GetPagesArgs } from './dto/get-pages.args';
 import { Page } from './pages.model';
-import { PageHistory } from './dto/pages-history';
 
 @Resolver(() => Page)
 export class PagesResolver {
@@ -102,25 +101,5 @@ export class PagesResolver {
   @Mutation(() => Page)
   unpublishPage(@Args('id', { type: () => Int }) id: number) {
     return this.pagesService.unpublishPage(id);
-  }
-
-  @Query(() => [PageHistory])
-  async getPageHistory(
-    @Args('pageId', { type: () => Int }) pageId: number,
-    @Args('page', { type: () => Int, nullable: true }) pageNumber?: number,
-    @Args('pageSize', { type: () => Int, nullable: true }) pageSize?: number,
-  ) {
-    return this.pagesService.getPageHistory(pageId, pageNumber ?? 1, pageSize ?? 10);
-  }
-
-  @Mutation(() => Page)
-  async collaborateOnPage(
-    @Args('userId', { type: () => Int }) userId: number,
-    @Args('pageId', { type: () => Int }) pageId: number,
-    @Args('contents', { type: () => [String] }) contents: string[], // Replace with a proper DTO if structured
-  ) {
-    // NOTE: This assumes `contents` is serialized — better to define a DTO for complex objects
-    const parsedContents = contents.map((c) => JSON.parse(c));
-    return this.pagesService.documentCollaboration(userId, pageId, parsedContents);
   }
 }
