@@ -361,12 +361,10 @@ export class PagesService {
       throw new BadRequestException(`You do not have permission to edit this page.`);
     }
 
-    // 2️⃣ Transaction: replace contents + save history
     const updatedPage = await this.prisma.$transaction(async (tx) => {
       // Delete old contents
       await tx.content.deleteMany({ where: { pageId } });
 
-      // Create new contents
       await tx.content.createMany({
         data: contents.map((c, index) => ({
           type: c.type as any,
@@ -376,7 +374,6 @@ export class PagesService {
         })),
       });
 
-      // Save history
       await tx.pageHistory.create({
         data: {
           pageId,
@@ -391,7 +388,7 @@ export class PagesService {
         include: { contents: true },
       });
     });
-    
+
     pubsub.publish(DOCUMENT_UPDATED, {
       documentUpdated: {
         pageId,
@@ -402,5 +399,51 @@ export class PagesService {
     });
 
     return updatedPage;
+  }
+
+  async getPageHistory(
+    pageId: number,
+    page: number = 1,
+    pageSize: number = 10
+  ) {
+    await this.getPageById(pageId);
+
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.pageHistory.findMany({
+        where: { pageId },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              lastName: true,
+              photoUrl: true,
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      this.prisma.pageHistory.count({ where: { pageId } }),
+    ]);
+
+    const history = items.map((entry) => ({
+      id: entry.id,
+      userId: entry.userId,
+      userName: `${entry.user.name ?? ''} ${entry.user.lastName ?? ''}`.trim(),
+      userPhoto: entry.user.photoUrl,
+      change: JSON.parse(entry.change),
+      createdAt: entry.createdAt,
+      createdAtFormatted: entry.createdAt.toLocaleString(),
+    }));
+
+    return {
+      items: history,
+      total,
+      page,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize),
+    };
   }
 }
