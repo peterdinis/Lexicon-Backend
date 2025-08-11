@@ -11,6 +11,6 @@ export class CreateUserInput {
   @MinLength(6)
   password: string;
 
-  @Field({ nullable: true })
-  name?: string;
+  @Field()
+  name: string;
 }

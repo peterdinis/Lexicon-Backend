@@ -14,6 +14,8 @@ import { CalendarModule } from 'src/calendar/calendar.module';
 import { AppModelResolver } from './app.resolver';
 import { TemplatesModule } from 'src/templates/templates.module';
 import { PageCollaborationModule } from 'src/page-collaboration/page-collaboration.module';
+import { AuthModule } from 'src/auth/auth.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { PageCollaborationModule } from 'src/page-collaboration/page-collaborati
     }),
     PrismaModule,
     PagesModule,
+    AuthModule,
+    UsersModule,
     WorkspacesModule,
     TasksModule,
     CalendarModule,

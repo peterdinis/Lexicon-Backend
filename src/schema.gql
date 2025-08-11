@@ -65,6 +65,14 @@ type Block {
   content: String!
 }
 
+type User {
+  id: Int!
+  email: String!
+  name: String
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+}
+
 type Query {
   getHelloWorldList: [AppModel!]!
   getPage(id: Int!): Page!
@@ -73,6 +81,7 @@ type Query {
   trashedPages(workspaceId: Int!, ownerId: Int): [Page!]!
   page(id: Int!): Page!
   pageTree(workspaceId: Int!, parentPageId: Int): [Page!]!
+  me: User!
   workspaces(query: WorkspaceQueryInput): WorkspacePaginated!
   workspace(id: Int!): Workspace!
   events(userId: Int, pageId: Int): [CalendarEvent!]!
@@ -96,6 +105,8 @@ type Mutation {
   movePage(id: Int!, newParentId: Int): Page!
   publishPage(id: Int!): Page!
   unpublishPage(id: Int!): Page!
+  login(data: LoginInput!): String!
+  register(data: CreateUserInput!): String!
   createWorkspace(input: CreateWorkspaceInput!): Workspace!
   updateWorkspace(input: UpdateWorkspaceInput!): Workspace!
   removeWorkspace(id: Int!): Workspace!
@@ -120,6 +131,17 @@ input UpdatePageInput {
   title: String
   isDatabase: Boolean
   parentPageId: Int
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  name: String!
 }
 
 input CreateWorkspaceInput {
