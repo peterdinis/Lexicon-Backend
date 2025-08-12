@@ -42,14 +42,25 @@ export class UsersService {
     });
   }
 
+  async login(email: string, password: string) {
+    const user = await this.findByEmail(email);
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new BadRequestException('Invalid password.');
+    }
+
+    // Pokud používáš JWT, tady by se generoval token
+    return user;
+  }
+
   async findByEmail(email: string) {
-    const user = await this.prisma.user.findUnique({
+    return this.prisma.user.findUnique({
       where: { email },
     });
-    if (!user) {
-      throw new NotFoundException(`User with email "${email}" not found.`);
-    }
-    return user;
   }
 
   async findById(id: number) {
