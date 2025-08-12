@@ -16,6 +16,7 @@ import { TemplatesModule } from 'src/templates/templates.module';
 import { PageCollaborationModule } from 'src/page-collaboration/page-collaboration.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
+import { SearchModule } from 'src/search/search.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { UsersModule } from 'src/users/users.module';
     TasksModule,
     CalendarModule,
     NotificationModule,
+    SearchModule
   ],
   providers: [
     {
