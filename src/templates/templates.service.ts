@@ -44,7 +44,7 @@ export class TemplatesService {
       data: {
         title,
         blocks,
-        createdBy: Number(userId)
+        createdBy: Number(userId),
       },
     });
   }

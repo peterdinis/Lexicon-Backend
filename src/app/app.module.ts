@@ -24,7 +24,7 @@ import { UsersModule } from 'src/users/users.module';
       playground: true,
       installSubscriptionHandlers: true,
       buildSchemaOptions: {
-        dateScalarMode: "timestamp"
+        dateScalarMode: 'timestamp',
       },
       context: ({ req, connection }) => {
         if (connection) {
@@ -53,7 +53,7 @@ import { UsersModule } from 'src/users/users.module';
     },
     AppModelResolver,
     TemplatesModule,
-    PageCollaborationModule
+    PageCollaborationModule,
   ],
 })
 export class AppModule {}

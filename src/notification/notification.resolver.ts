@@ -16,7 +16,7 @@ const pubSub = new PubSub();
 
 @Resolver(() => Notification)
 export class NotificationsResolver {
-  constructor(private notificationsService: NotificationsService) { }
+  constructor(private notificationsService: NotificationsService) {}
 
   @Query(() => [Notification])
   @UseGuards(GqlAuthGuard)
