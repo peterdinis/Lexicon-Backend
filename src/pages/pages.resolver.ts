@@ -7,7 +7,7 @@ import { Page } from './pages.model';
 
 @Resolver(() => Page)
 export class PagesResolver {
-  constructor(private readonly pagesService: PagesService) { }
+  constructor(private readonly pagesService: PagesService) {}
 
   @Mutation(() => Page)
   createPage(@Args('input') input: CreatePageInput) {

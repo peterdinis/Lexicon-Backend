@@ -48,7 +48,9 @@ describe('WorkspacesService', () => {
       const data = { name: 'Test Workspace' };
       const result = await service.create(data);
 
-      expect(prismaMock.workspace.findFirst).toHaveBeenCalledWith({ where: { name: data.name } });
+      expect(prismaMock.workspace.findFirst).toHaveBeenCalledWith({
+        where: { name: data.name },
+      });
       expect(prismaMock.workspace.create).toHaveBeenCalledWith({ data });
       expect(result).toEqual(mockWorkspace);
     });
@@ -56,7 +58,9 @@ describe('WorkspacesService', () => {
     it('should throw error if workspace name exists', async () => {
       prismaMock.workspace.findFirst.mockResolvedValue(mockWorkspace);
 
-      await expect(service.create({ name: 'Test Workspace' })).rejects.toThrow('Workspace name already exists');
+      await expect(service.create({ name: 'Test Workspace' })).rejects.toThrow(
+        'Workspace name already exists',
+      );
     });
   });
 
@@ -97,14 +101,19 @@ describe('WorkspacesService', () => {
     it('should throw error if workspace not found', async () => {
       prismaMock.workspace.findUnique.mockResolvedValue(null);
 
-      await expect(service.findOne(999)).rejects.toThrow('Workspace with ID 999 not found');
+      await expect(service.findOne(999)).rejects.toThrow(
+        'Workspace with ID 999 not found',
+      );
     });
   });
 
   describe('update', () => {
     it('should update a workspace', async () => {
       prismaMock.workspace.findUnique.mockResolvedValue(mockWorkspace);
-      prismaMock.workspace.update.mockResolvedValue({ ...mockWorkspace, name: 'Updated' });
+      prismaMock.workspace.update.mockResolvedValue({
+        ...mockWorkspace,
+        name: 'Updated',
+      });
 
       const data = { id: 1, name: 'Updated' };
       const result = await service.update(1, data);
@@ -119,7 +128,9 @@ describe('WorkspacesService', () => {
     it('should throw error if workspace not found', async () => {
       prismaMock.workspace.findUnique.mockResolvedValue(null);
 
-      await expect(service.update(999, { id: 1, name: 'Nope' })).rejects.toThrow('Workspace with ID 999 not found');
+      await expect(
+        service.update(999, { id: 1, name: 'Nope' }),
+      ).rejects.toThrow('Workspace with ID 999 not found');
     });
   });
 
@@ -130,14 +141,18 @@ describe('WorkspacesService', () => {
 
       const result = await service.remove(1);
 
-      expect(prismaMock.workspace.delete).toHaveBeenCalledWith({ where: { id: 1 } });
+      expect(prismaMock.workspace.delete).toHaveBeenCalledWith({
+        where: { id: 1 },
+      });
       expect(result).toEqual(mockWorkspace);
     });
 
     it('should throw error if workspace not found', async () => {
       prismaMock.workspace.findUnique.mockResolvedValue(null);
 
-      await expect(service.remove(999)).rejects.toThrow('Workspace with ID 999 not found');
+      await expect(service.remove(999)).rejects.toThrow(
+        'Workspace with ID 999 not found',
+      );
     });
   });
 });

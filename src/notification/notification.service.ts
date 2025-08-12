@@ -23,7 +23,7 @@ interface NotificationEvents {
 export class NotificationsService {
   private pubSub = new PubSub<NotificationEvents>();
 
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   getPubSub() {
     return this.pubSub;
