@@ -73,6 +73,43 @@ type User {
   updatedAt: Timestamp!
 }
 
+type UserResult {
+  id: Float!
+  email: String!
+  name: String
+  lastName: String
+}
+
+type PageResult {
+  id: Float!
+  title: String!
+  emoji: String
+}
+
+type WorkspaceResult {
+  id: Float!
+  name: String!
+}
+
+type TaskResult {
+  id: Float!
+  title: String!
+  description: String
+}
+
+type EventResult {
+  id: Float!
+  title: String!
+}
+
+type SearchResult {
+  users: [UserResult!]!
+  pages: [PageResult!]!
+  workspaces: [WorkspaceResult!]!
+  tasks: [TaskResult!]!
+  events: [EventResult!]!
+}
+
 type Query {
   getHelloWorldList: [AppModel!]!
   getPage(id: Int!): Page!
@@ -87,6 +124,7 @@ type Query {
   events(userId: Int, pageId: Int): [CalendarEvent!]!
   event(id: Int!): CalendarEvent!
   myNotifications: [Notification!]!
+  search(query: String!): SearchResult!
 }
 
 input WorkspaceQueryInput {
