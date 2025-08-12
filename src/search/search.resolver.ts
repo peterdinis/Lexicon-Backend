@@ -1,6 +1,12 @@
 import { Resolver, Query, Args, Field, ObjectType } from '@nestjs/graphql';
 import { SearchService } from './search.service';
-import { UserResult, PageResult, WorkspaceResult, TaskResult, EventResult } from './dto/search-result';
+import {
+  UserResult,
+  PageResult,
+  WorkspaceResult,
+  TaskResult,
+  EventResult,
+} from './dto/search-result';
 
 @ObjectType()
 class SearchResult {

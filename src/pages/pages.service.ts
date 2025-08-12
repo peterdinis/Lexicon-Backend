@@ -9,10 +9,9 @@ import { CreatePageInput } from './dto/create-page.input';
 import { UpdatePageInput } from './dto/update-page.input';
 import { generateRandomToken } from 'src/shared/custom/genearteRandomToken';
 
-
 @Injectable()
 export class PagesService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async createPage(data: CreatePageInput) {
     const { title, workspaceId, ownerId, parentPageId, isDatabase } = data;

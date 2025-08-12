@@ -49,10 +49,7 @@ export class SearchService {
 
     const tasks = await this.prisma.task.findMany({
       where: {
-        OR: [
-          { title: { contains: q } },
-          { description: { contains: q } },
-        ],
+        OR: [{ title: { contains: q } }, { description: { contains: q } }],
       },
       take: 10,
     });
