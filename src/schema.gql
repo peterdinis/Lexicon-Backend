@@ -148,6 +148,7 @@ type Mutation {
   createWorkspace(input: CreateWorkspaceInput!): Workspace!
   updateWorkspace(input: UpdateWorkspaceInput!): Workspace!
   removeWorkspace(id: Int!): Workspace!
+  switchWorkspace(userId: Int!, workspaceId: Int!): Workspace!
   createEvent(input: CreateEventInput!): CalendarEvent!
   updateEvent(input: UpdateEventInput!): CalendarEvent!
   deleteEvent(id: Int!): CalendarEvent!

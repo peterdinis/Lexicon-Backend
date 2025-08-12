@@ -6,7 +6,7 @@ import { UpdateWorkspaceInput } from './dto/update-workspace-input';
 
 @Injectable()
 export class WorkspacesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(data: CreateWorkspaceInput) {
     const existing = await this.prisma.workspace.findFirst({
@@ -22,11 +22,11 @@ export class WorkspacesService {
 
     const where = search
       ? {
-          name: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        }
+        name: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      }
       : {};
 
     const [items, total] = await this.prisma.$transaction([
@@ -72,5 +72,22 @@ export class WorkspacesService {
     if (!existing) throw new Error(`Workspace with ID ${id} not found`);
 
     return this.prisma.workspace.delete({ where: { id } });
+  }
+
+  async switchWorkspace(userId: number, targetWorkspaceId: number) {
+    const workspace = await this.prisma.workspace.findUnique({
+      where: { id: targetWorkspaceId },
+    });
+
+    if (!workspace) {
+      throw new Error(`Workspace with ID ${targetWorkspaceId} not found`);
+    }
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { currentWorkspaceId: targetWorkspaceId },
+    });
+
+    return workspace;
   }
 }

@@ -8,7 +8,7 @@ import { Workspace } from './workspace.model';
 
 @Resolver(() => Workspace)
 export class WorkspacesResolver {
-  constructor(private readonly workspacesService: WorkspacesService) {}
+  constructor(private readonly workspacesService: WorkspacesService) { }
 
   @Mutation(() => Workspace)
   createWorkspace(@Args('input') input: CreateWorkspaceInput) {
@@ -33,5 +33,13 @@ export class WorkspacesResolver {
   @Mutation(() => Workspace)
   removeWorkspace(@Args('id', { type: () => Int }) id: number) {
     return this.workspacesService.remove(id);
+  }
+
+  @Mutation(() => Workspace)
+  async switchWorkspace(
+    @Args('userId', { type: () => Int }) userId: number,
+    @Args('workspaceId', { type: () => Int }) workspaceId: number,
+  ) {
+    return this.workspacesService.switchWorkspace(userId, workspaceId);
   }
 }
