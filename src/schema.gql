@@ -71,6 +71,8 @@ type User {
   name: String
   createdAt: Timestamp!
   updatedAt: Timestamp!
+  lastName: String
+  photoUrl: String
 }
 
 type UserResult {
