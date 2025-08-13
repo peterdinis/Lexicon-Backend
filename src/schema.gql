@@ -147,6 +147,8 @@ type Mutation {
   unpublishPage(id: Int!): Page!
   login(data: LoginInput!): String!
   register(data: CreateUserInput!): String!
+  updateProfile(data: UpdateUserInput!): User!
+  deleteProfile: Boolean!
   createWorkspace(input: CreateWorkspaceInput!): Workspace!
   updateWorkspace(input: UpdateWorkspaceInput!): Workspace!
   removeWorkspace(id: Int!): Workspace!
@@ -183,6 +185,12 @@ input CreateUserInput {
   email: String!
   password: String!
   name: String!
+}
+
+input UpdateUserInput {
+  email: String
+  password: String
+  name: String
 }
 
 input CreateWorkspaceInput {
