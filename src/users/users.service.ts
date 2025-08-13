@@ -3,7 +3,8 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { User } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserInput } from './dto/create-user-input';
 import * as bcrypt from 'bcrypt';
 
@@ -79,5 +80,57 @@ export class UsersService {
       throw new NotFoundException('No users found.');
     }
     return users;
+  }
+
+  async update(id: number, data: User) {
+    // Validate if user exists first
+    const user = await this.findById(id);
+
+    if (data.email && !this.validateEmail(data.email)) {
+      throw new BadRequestException('Invalid email format.');
+    }
+
+    if (data.email && data.email !== user.email) {
+      const emailTaken = await this.findByEmail(data.email);
+      if (emailTaken) {
+        throw new BadRequestException('Email already in use.');
+      }
+    }
+
+    if (data.password) {
+      if (data.password.length < 6) {
+        throw new BadRequestException(
+          'Password must be at least 6 characters long.',
+        );
+      }
+      // hash the new password before saving
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+
+    // Optionally, you can validate other fields like name, lastName, photoUrl here
+    if (data.name && typeof data.name !== 'string') {
+      throw new BadRequestException('Invalid name format.');
+    }
+
+    if (data.lastName && typeof data.lastName !== 'string') {
+      throw new BadRequestException('Invalid lastName format.');
+    }
+
+    // Example of photoUrl validation (simple check)
+    if (
+      data.photoUrl &&
+      !/^https?:\/\/.+\.(jpg|jpeg|png|gif|svg)$/.test(data.photoUrl)
+    ) {
+      throw new BadRequestException('Invalid photo URL.');
+    }
+
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async delete(id: number) {
+    return this.prisma.user.delete({ where: { id } });
   }
 }
