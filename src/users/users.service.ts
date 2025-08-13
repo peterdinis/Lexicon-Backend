@@ -1,12 +1,16 @@
-import { Injectable, BadRequestException, NotFoundException } from "@nestjs/common";
-import { User } from "@prisma/client";
-import { PrismaService } from "src/prisma/prisma.service";
-import { CreateUserInput } from "./dto/create-user-input";
-import * as bcrypt from "bcrypt"
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
+import { User } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateUserInput } from './dto/create-user-input';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   private validateEmail(email: string): boolean {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -113,7 +117,10 @@ export class UsersService {
     }
 
     // Example of photoUrl validation (simple check)
-    if (data.photoUrl && !/^https?:\/\/.+\.(jpg|jpeg|png|gif|svg)$/.test(data.photoUrl)) {
+    if (
+      data.photoUrl &&
+      !/^https?:\/\/.+\.(jpg|jpeg|png|gif|svg)$/.test(data.photoUrl)
+    ) {
       throw new BadRequestException('Invalid photo URL.');
     }
 

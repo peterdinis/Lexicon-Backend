@@ -21,12 +21,12 @@ export class User {
   updatedAt: Date;
 
   @Field({
-    nullable: true
-  })  
-  lastName: string
+    nullable: true,
+  })
+  lastName: string;
 
   @Field({
-    nullable: true
+    nullable: true,
   })
-  photoUrl: string
+  photoUrl: string;
 }

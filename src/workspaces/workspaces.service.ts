@@ -6,7 +6,7 @@ import { UpdateWorkspaceInput } from './dto/update-workspace-input';
 
 @Injectable()
 export class WorkspacesService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(data: CreateWorkspaceInput) {
     const existing = await this.prisma.workspace.findFirst({
@@ -22,11 +22,11 @@ export class WorkspacesService {
 
     const where = search
       ? {
-        name: {
-          contains: search,
-          mode: 'insensitive',
-        },
-      }
+          name: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        }
       : {};
 
     const [items, total] = await this.prisma.$transaction([

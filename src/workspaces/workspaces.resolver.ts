@@ -8,7 +8,7 @@ import { Workspace } from './workspace.model';
 
 @Resolver(() => Workspace)
 export class WorkspacesResolver {
-  constructor(private readonly workspacesService: WorkspacesService) { }
+  constructor(private readonly workspacesService: WorkspacesService) {}
 
   @Mutation(() => Workspace)
   createWorkspace(@Args('input') input: CreateWorkspaceInput) {

@@ -46,7 +46,7 @@ import { SearchModule } from 'src/search/search.module';
     TasksModule,
     CalendarModule,
     NotificationModule,
-    SearchModule
+    SearchModule,
   ],
   providers: [
     {
