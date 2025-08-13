@@ -73,4 +73,21 @@ export class WorkspacesService {
 
     return this.prisma.workspace.delete({ where: { id } });
   }
+
+  async switchWorkspace(userId: number, targetWorkspaceId: number) {
+    const workspace = await this.prisma.workspace.findUnique({
+      where: { id: targetWorkspaceId },
+    });
+
+    if (!workspace) {
+      throw new Error(`Workspace with ID ${targetWorkspaceId} not found`);
+    }
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { currentWorkspaceId: targetWorkspaceId },
+    });
+
+    return workspace;
+  }
 }

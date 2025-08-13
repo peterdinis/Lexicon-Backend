@@ -19,4 +19,14 @@ export class User {
 
   @Field()
   updatedAt: Date;
+
+  @Field({
+    nullable: true,
+  })
+  lastName: string;
+
+  @Field({
+    nullable: true,
+  })
+  photoUrl: string;
 }

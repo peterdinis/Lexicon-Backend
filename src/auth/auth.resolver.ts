@@ -7,6 +7,7 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { GqlAuthGuard } from './guard/gql-auth.guard';
 import { User } from 'src/users/users.model';
 import { UsersService } from 'src/users/users.service';
+import { UpdateUserInput } from 'src/users/dto/update-user.input';
 
 @Resolver()
 export class AuthResolver {
@@ -31,5 +32,21 @@ export class AuthResolver {
   @UseGuards(GqlAuthGuard)
   me(@CurrentUser() user: User) {
     return this.usersService.findByEmail(user.email);
+  }
+
+  @Mutation(() => User)
+  @UseGuards(GqlAuthGuard)
+  async updateProfile(
+    @CurrentUser() currentUser: User,
+    @Args('data') data: UpdateUserInput
+  ) {
+    return this.usersService.update(currentUser.id, data as any);
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GqlAuthGuard)
+  async deleteProfile(@CurrentUser() currentUser: User) {
+    await this.usersService.delete(currentUser.id);
+    return true;
   }
 }

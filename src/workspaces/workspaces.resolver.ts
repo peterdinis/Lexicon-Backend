@@ -34,4 +34,12 @@ export class WorkspacesResolver {
   removeWorkspace(@Args('id', { type: () => Int }) id: number) {
     return this.workspacesService.remove(id);
   }
+
+  @Mutation(() => Workspace)
+  async switchWorkspace(
+    @Args('userId', { type: () => Int }) userId: number,
+    @Args('workspaceId', { type: () => Int }) workspaceId: number,
+  ) {
+    return this.workspacesService.switchWorkspace(userId, workspaceId);
+  }
 }
