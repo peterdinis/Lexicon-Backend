@@ -123,6 +123,7 @@ type Query {
   me: User!
   workspaces(query: WorkspaceQueryInput): WorkspacePaginated!
   workspace(id: Int!): Workspace!
+  currentWorkspace(userId: Int!): Workspace!
   events(userId: Int, pageId: Int): [CalendarEvent!]!
   event(id: Int!): CalendarEvent!
   myNotifications: [Notification!]!
