@@ -65,6 +65,23 @@ type Block {
   content: String!
 }
 
+type Template {
+  id: String!
+  title: String!
+  blocks: [Block!]!
+  isCustom: Boolean!
+}
+
+type PageHistory {
+  id: String!
+  userId: Int!
+  userName: String!
+  userPhoto: String
+  change: String!
+  createdAt: Timestamp!
+  createdAtFormatted: String!
+}
+
 type User {
   id: Int!
   email: String!
@@ -123,10 +140,14 @@ type Query {
   me: User!
   workspaces(query: WorkspaceQueryInput): WorkspacePaginated!
   workspace(id: Int!): Workspace!
+  currentWorkspace(userId: Int!): Workspace!
   events(userId: Int, pageId: Int): [CalendarEvent!]!
   event(id: Int!): CalendarEvent!
   myNotifications: [Notification!]!
   search(query: String!): SearchResult!
+  getTemplates: [Template!]!
+  getTemplate(id: String!): Template!
+  getPageHistory(pageId: Int!, page: Int, pageSize: Int): [PageHistory!]!
 }
 
 input WorkspaceQueryInput {
@@ -159,6 +180,9 @@ type Mutation {
   markNotificationRead(id: String!): Notification!
   markAllNotificationsRead: Boolean!
   deleteNotification(id: String!): Notification!
+  createCustomTemplate(input: CreateTemplateInput!): Template!
+  updateCustomTemplate(input: UpdateTemplateInput!): Template!
+  collaborateOnPage(userId: Int!, pageId: Int!, contents: [String!]!): Page!
 }
 
 input CreatePageInput {
@@ -217,6 +241,22 @@ input UpdateEventInput {
   userId: Int
   pageId: Int
   id: Int!
+}
+
+input CreateTemplateInput {
+  title: String!
+  blocks: [BlockInput!]!
+}
+
+input BlockInput {
+  type: String!
+  content: String!
+}
+
+input UpdateTemplateInput {
+  id: String!
+  title: String!
+  blocks: [BlockInput!]!
 }
 
 type Subscription {

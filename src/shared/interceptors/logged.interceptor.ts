@@ -1,34 +1,35 @@
 import {
-  CallHandler,
-  ExecutionContext,
   Injectable,
   NestInterceptor,
-  Logger,
+  ExecutionContext,
+  CallHandler,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Observable, tap } from 'rxjs';
+import * as util from 'util';
 
 @Injectable()
 export class LoggedInterceptor implements NestInterceptor {
-  private readonly logger = new Logger('GraphQL');
-
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    // Convert the Nest ExecutionContext to GraphQL context
     const gqlCtx = GqlExecutionContext.create(context);
     const info = gqlCtx.getInfo();
-    const variables = gqlCtx.getArgs();
-    const user = gqlCtx.getContext()?.req?.user; // if using auth
+    const args = gqlCtx.getArgs();
 
-    const operation = info.operation.operation;
-    const operationName = info.fieldName;
+    const operationType = info.operation.operation.toUpperCase(); // QUERY, MUTATION, SUBSCRIPTION
+    const fieldName = info.fieldName;
+    const variables = args;
 
-    const now = Date.now();
+    const start = Date.now();
+    console.log('----------------------------------');
+    console.log(`🚀 GraphQL ${operationType} → ${fieldName}`);
+    console.log(`📦 Variables: ${util.inspect(variables, { depth: null, colors: true })}`);
+
     return next.handle().pipe(
       tap(() => {
-        this.logger.log(
-          `${operation.toUpperCase()} "${operationName}" ${
-            user ? `by ${user.email || user.id}` : ''
-          } - ${Date.now() - now}ms`,
-        );
+        const duration = Date.now() - start;
+        console.log(`✅ Completed in ${duration}ms`);
+        console.log('----------------------------------\n');
       }),
     );
   }

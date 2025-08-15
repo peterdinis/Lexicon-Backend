@@ -9,6 +9,15 @@ export class Block {
   content: string;
 }
 
+@InputType()
+export class BlockInput {
+  @Field()
+  type: string;
+
+  @Field()
+  content: string;
+}
+
 @ObjectType()
 export class Template {
   @Field()
@@ -29,8 +38,8 @@ export class CreateTemplateInput {
   @Field()
   title: string;
 
-  @Field(() => [Block])
-  blocks: Block[];
+  @Field(() => [BlockInput])
+  blocks: BlockInput[];
 }
 
 @InputType()
@@ -41,6 +50,6 @@ export class UpdateTemplateInput {
   @Field()
   title: string;
 
-  @Field(() => [Block])
-  blocks: Block[];
+  @Field(() => [BlockInput])
+  blocks: BlockInput[];
 }

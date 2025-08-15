@@ -47,6 +47,8 @@ import { SearchModule } from 'src/search/search.module';
     CalendarModule,
     NotificationModule,
     SearchModule,
+    TemplatesModule,
+    PageCollaborationModule,
   ],
   providers: [
     {
@@ -54,8 +56,6 @@ import { SearchModule } from 'src/search/search.module';
       useClass: LoggedInterceptor,
     },
     AppModelResolver,
-    TemplatesModule,
-    PageCollaborationModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
