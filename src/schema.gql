@@ -24,6 +24,7 @@ scalar Timestamp
 type Workspace {
   id: Int!
   name: String!
+  description: String
   createdAt: Timestamp!
   updatedAt: Timestamp!
   pages: [Page!]
@@ -219,10 +220,12 @@ input UpdateUserInput {
 
 input CreateWorkspaceInput {
   name: String!
+  description: String
 }
 
 input UpdateWorkspaceInput {
   name: String
+  description: String
   id: Int!
 }
 
