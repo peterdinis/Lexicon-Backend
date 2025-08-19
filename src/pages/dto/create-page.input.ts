@@ -37,4 +37,9 @@ export class CreatePageInput {
   @IsOptional()
   @IsBoolean()
   isDatabase?: boolean;
+
+    @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  content?: string;
 }

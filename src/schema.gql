@@ -193,6 +193,7 @@ input CreatePageInput {
   parentPageId: Int
   emoji: String!
   isDatabase: Boolean
+  content: String
 }
 
 input UpdatePageInput {
