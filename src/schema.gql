@@ -94,32 +94,31 @@ type User {
 }
 
 type UserResult {
-  id: Float!
+  id: ID!
+  name: String!
   email: String!
-  name: String
-  lastName: String
 }
 
 type PageResult {
-  id: Float!
+  id: ID!
   title: String!
-  emoji: String
 }
 
 type WorkspaceResult {
-  id: Float!
+  id: ID!
   name: String!
 }
 
 type TaskResult {
-  id: Float!
+  id: ID!
   title: String!
-  description: String
+  status: String
 }
 
 type EventResult {
-  id: Float!
+  id: ID!
   title: String!
+  date: Timestamp
 }
 
 type SearchResult {
