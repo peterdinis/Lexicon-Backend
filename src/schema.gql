@@ -11,6 +11,7 @@ type Page {
   ownerId: Int!
   sortPosition: Int!
   createdAt: Timestamp!
+  emoji: String
   updatedAt: Timestamp!
   trashedAt: Timestamp
   subPages: [Page!]
