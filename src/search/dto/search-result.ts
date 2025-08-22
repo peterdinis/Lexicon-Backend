@@ -1,35 +1,38 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { Field, ObjectType, ID } from '@nestjs/graphql';
 
 @ObjectType()
 export class UserResult {
-  @Field() id: number;
+  @Field(() => ID) id: string;
+  @Field() name: string;
   @Field() email: string;
-  @Field({ nullable: true }) name?: string;
-  @Field({ nullable: true }) lastName?: string;
 }
 
 @ObjectType()
 export class PageResult {
-  @Field() id: number;
+  @Field(() => ID) id: string;
   @Field() title: string;
-  @Field({ nullable: true }) emoji?: string;
 }
 
 @ObjectType()
 export class WorkspaceResult {
-  @Field() id: number;
+  @Field(() => ID) id: string;
   @Field() name: string;
 }
 
 @ObjectType()
 export class TaskResult {
-  @Field() id: number;
+  @Field(() => ID) id: string;
   @Field() title: string;
-  @Field({ nullable: true }) description?: string;
+
+  // make sure this matches your Prisma model
+  @Field({ nullable: true }) status?: string;
 }
 
 @ObjectType()
 export class EventResult {
-  @Field() id: number;
+  @Field(() => ID) id: string;
   @Field() title: string;
+
+  // make sure this matches your Prisma model
+  @Field({ nullable: true }) date?: Date;
 }

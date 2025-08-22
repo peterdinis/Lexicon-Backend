@@ -6,4 +6,9 @@ export class CreateWorkspaceInput {
   @Field()
   @IsNotEmpty()
   name: string;
+
+  @Field({
+    nullable: true
+  })
+  description: string
 }
