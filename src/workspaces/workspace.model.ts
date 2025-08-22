@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Page } from 'src/pages/pages.model';
+
 @ObjectType()
 export class Workspace {
   @Field(() => Int)
@@ -7,6 +8,9 @@ export class Workspace {
 
   @Field()
   name: string;
+
+  @Field({ nullable: true })
+  description?: string;
 
   @Field()
   createdAt: Date;

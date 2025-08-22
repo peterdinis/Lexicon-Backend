@@ -11,6 +11,7 @@ type Page {
   ownerId: Int!
   sortPosition: Int!
   createdAt: Timestamp!
+  emoji: String
   updatedAt: Timestamp!
   trashedAt: Timestamp
   subPages: [Page!]
@@ -24,6 +25,7 @@ scalar Timestamp
 type Workspace {
   id: Int!
   name: String!
+  description: String
   createdAt: Timestamp!
   updatedAt: Timestamp!
   pages: [Page!]
@@ -93,32 +95,31 @@ type User {
 }
 
 type UserResult {
-  id: Float!
+  id: ID!
+  name: String!
   email: String!
-  name: String
-  lastName: String
 }
 
 type PageResult {
-  id: Float!
+  id: ID!
   title: String!
-  emoji: String
 }
 
 type WorkspaceResult {
-  id: Float!
+  id: ID!
   name: String!
 }
 
 type TaskResult {
-  id: Float!
+  id: ID!
   title: String!
-  description: String
+  status: String
 }
 
 type EventResult {
-  id: Float!
+  id: ID!
   title: String!
+  date: Timestamp
 }
 
 type SearchResult {
@@ -192,6 +193,7 @@ input CreatePageInput {
   parentPageId: Int
   emoji: String!
   isDatabase: Boolean
+  content: String
 }
 
 input UpdatePageInput {
@@ -219,10 +221,12 @@ input UpdateUserInput {
 
 input CreateWorkspaceInput {
   name: String!
+  description: String
 }
 
 input UpdateWorkspaceInput {
   name: String
+  description: String
   id: Int!
 }
 
@@ -261,4 +265,7 @@ input UpdateTemplateInput {
 
 type Subscription {
   notificationCreated: Notification!
+  pageCreated: Page!
+  workspaceCreated: Workspace!
+  eventCreated: CalendarEvent!
 }

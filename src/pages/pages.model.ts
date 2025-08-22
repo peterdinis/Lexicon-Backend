@@ -26,6 +26,9 @@ export class Page {
   @Field()
   createdAt: Date;
 
+  @Field({ nullable: true })
+  emoji?: string;
+
   @Field()
   updatedAt: Date;
 

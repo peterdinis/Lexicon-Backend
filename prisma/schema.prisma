@@ -43,6 +43,7 @@ model Template {
 model Workspace {
   id        Int      @id @default(autoincrement())
   name      String   @unique
+  description String? @default("ABCD")
   users     User[]   @relation("UserWorkspaces")
   pages     Page[]
   createdAt DateTime @default(now())
