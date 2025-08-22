@@ -17,6 +17,7 @@ import { PageCollaborationModule } from 'src/page-collaboration/page-collaborati
 import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 import { SearchModule } from 'src/search/search.module';
+import { RecentModule } from 'src/recent/recent.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { SearchModule } from 'src/search/search.module';
     SearchModule,
     TemplatesModule,
     PageCollaborationModule,
+    RecentModule
   ],
   providers: [
     {

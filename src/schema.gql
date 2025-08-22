@@ -265,4 +265,7 @@ input UpdateTemplateInput {
 
 type Subscription {
   notificationCreated: Notification!
+  pageCreated: Page!
+  workspaceCreated: Workspace!
+  eventCreated: CalendarEvent!
 }
