@@ -49,7 +49,7 @@ import { RecentModule } from 'src/recent/recent.module';
     NotificationModule,
     SearchModule,
     TemplatesModule,
-    PageCollaborationModule,
+    PageCollaborationModule, 
     RecentModule
   ],
   providers: [
