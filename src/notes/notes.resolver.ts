@@ -5,7 +5,7 @@ import { Note } from './model/note.model';
 import { NoteService } from './notes.service';
 
 @Resolver(() => Note)
-export class NoteResolver {
+export class NotesResolver {
   constructor(private readonly noteService: NoteService) {}
 
   @Query(() => [Note], { name: 'notes' })

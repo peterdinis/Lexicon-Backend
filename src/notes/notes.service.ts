@@ -8,7 +8,7 @@ import { UpdateNoteInput } from './dto/update-note.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class NoteService {
+export class NotesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(input: CreateNoteInput) {
