@@ -18,11 +18,11 @@ export class NotesService {
 
     // optional: ensure user exists before creating
     const userExists = await this.prisma.user.findUnique({
-      where: { id: input.cratedBy },
+      where: { id: input.createdBy },
     });
     if (!userExists) {
       throw new BadRequestException(
-        `User with id ${input.cratedBy} does not exist`,
+        `User with id ${input.createdBy} does not exist`,
       );
     }
 
@@ -31,7 +31,7 @@ export class NotesService {
         name: input.name.trim(),
         description: input.description?.trim() || null,
         content: input.content,
-        createdBy: input.cratedBy,
+        createdBy: input.createdBy,
       },
     });
   }

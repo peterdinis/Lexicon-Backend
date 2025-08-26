@@ -130,6 +130,21 @@ type SearchResult {
   events: [EventResult!]!
 }
 
+type Note {
+  id: ID!
+  name: String!
+  description: String
+  content: JSON!
+  createdBy: Float!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
 type Query {
   getHelloWorldList: [AppModel!]!
   getPage(id: Int!): Page!
@@ -149,6 +164,8 @@ type Query {
   getTemplates: [Template!]!
   getTemplate(id: String!): Template!
   getPageHistory(pageId: Int!, page: Int, pageSize: Int): [PageHistory!]!
+  notes: [Note!]!
+  note(id: ID!): Note!
 }
 
 input WorkspaceQueryInput {
@@ -184,6 +201,9 @@ type Mutation {
   createCustomTemplate(input: CreateTemplateInput!): Template!
   updateCustomTemplate(input: UpdateTemplateInput!): Template!
   collaborateOnPage(userId: Int!, pageId: Int!, contents: [String!]!): Page!
+  createNote(input: CreateNoteInput!): Note!
+  updateNote(input: UpdateNoteInput!): Note!
+  removeNote(id: ID!): Note!
 }
 
 input CreatePageInput {
@@ -261,6 +281,21 @@ input UpdateTemplateInput {
   id: String!
   title: String!
   blocks: [BlockInput!]!
+}
+
+input CreateNoteInput {
+  name: String!
+  description: String
+  content: JSON!
+  createdBy: Float!
+}
+
+input UpdateNoteInput {
+  name: String
+  description: String
+  content: JSON
+  createdBy: Float
+  id: ID!
 }
 
 type Subscription {
