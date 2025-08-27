@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { clerkClient} from '@clerk/express';
 
 @Injectable()
-export class ClerkAuthService {
+export class AuthService {
   constructor(private prisma: PrismaService) {}
 
   /**
