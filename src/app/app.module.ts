@@ -17,6 +17,7 @@ import { PageCollaborationModule } from 'src/page-collaboration/page-collaborati
 import { SearchModule } from 'src/search/search.module';
 import { RecentModule } from 'src/recent/recent.module';
 import { NotesModule } from 'src/notes/notes.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { NotesModule } from 'src/notes/notes.module';
     WorkspacesModule,
     TasksModule,
     CalendarModule,
+    AuthModule,
     NotificationModule,
     SearchModule,
     TemplatesModule,
