@@ -2,11 +2,11 @@ import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { CreateNoteInput } from './dto/create-note.input';
 import { UpdateNoteInput } from './dto/update-note.input';
 import { Note } from './model/note.model';
-import { NoteService } from './notes.service';
+import { NotesService } from './notes.service';
 
 @Resolver(() => Note)
 export class NotesResolver {
-  constructor(private readonly noteService: NoteService) {}
+  constructor(private readonly noteService: NotesService) {}
 
   @Query(() => [Note], { name: 'notes' })
   findAll() {

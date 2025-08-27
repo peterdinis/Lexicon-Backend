@@ -13,5 +13,5 @@ export class CreateNoteInput {
   content: any;
 
   @Field()
-  cratedBy: number;
+  createdBy: number;
 }

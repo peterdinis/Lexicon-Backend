@@ -18,6 +18,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 import { SearchModule } from 'src/search/search.module';
 import { RecentModule } from 'src/recent/recent.module';
+import { NotesModule } from 'src/notes/notes.module';
 
 @Module({
   imports: [
@@ -50,7 +51,8 @@ import { RecentModule } from 'src/recent/recent.module';
     SearchModule,
     TemplatesModule,
     PageCollaborationModule,
-    RecentModule
+    RecentModule,
+    NotesModule
   ],
   providers: [
     {
