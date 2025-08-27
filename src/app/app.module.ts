@@ -14,8 +14,7 @@ import { CalendarModule } from 'src/calendar/calendar.module';
 import { AppModelResolver } from './app.resolver';
 import { TemplatesModule } from 'src/templates/templates.module';
 import { PageCollaborationModule } from 'src/page-collaboration/page-collaboration.module';
-import { AuthModule } from 'src/auth/auth.module';
-import { UsersModule } from 'src/users/users.module';
+import { AuthModule } from 'src/auth/auth.module'
 import { SearchModule } from 'src/search/search.module';
 import { RecentModule } from 'src/recent/recent.module';
 import { NotesModule } from 'src/notes/notes.module';
@@ -43,7 +42,6 @@ import { NotesModule } from 'src/notes/notes.module';
     PrismaModule,
     PagesModule,
     AuthModule,
-    UsersModule,
     WorkspacesModule,
     TasksModule,
     CalendarModule,
