@@ -1,40 +1,35 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { UsersService } from '../users/users.service';
-import { CreateUserInput } from 'src/users/dto/create-user-input';
-import { LoginInput } from 'src/users/dto/login-input';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { clerkClient} from '@clerk/express';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
-  async register(input: CreateUserInput) {
-    const hashedPassword = await bcrypt.hash(input.password, 10);
-    const user = await this.usersService.create({
-      ...input,
-      password: hashedPassword,
+  /**
+   * Ensure user exists in DB after Clerk login/signup
+   */
+  async ensureUser(clerkUserId: string) {
+    // Fetch user from Clerk
+    const clerkUser = await clerkClient.users.getUser(clerkUserId);
+
+    // Check if user exists in DB
+    let user = await this.prisma.user.findUnique({
+      where: { email: clerkUser.emailAddresses[0].emailAddress },
     });
-    return this.signUser(user.id, user.email);
-  }
 
-  async login(input: LoginInput) {
-    const user = await this.usersService.findByEmail(input.email);
-    if (!user) throw new UnauthorizedException('Invalid credentials');
+    if (!user) {
+      // Create user in DB
+      user = await this.prisma.user.create({
+        data: {
+          email: clerkUser.emailAddresses[0].emailAddress,
+          name: clerkUser.firstName,
+          lastName: clerkUser.lastName,
+          photoUrl: clerkUser.imageUrl,
+        },
+      });
+    }
 
-    const passwordMatch = await bcrypt.compare(input.password, user.password);
-    if (!passwordMatch) throw new UnauthorizedException('Invalid credentials');
-
-    return this.signUser(user.id, user.email);
-  }
-
-  private signUser(userId: number, email: string) {
-    const payload = { sub: userId, email };
-    return {
-      accessToken: this.jwtService.sign(payload),
-    };
+    return user;
   }
 }
