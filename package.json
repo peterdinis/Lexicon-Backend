@@ -16,7 +16,9 @@
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
+    "@offset-dev/strapi-calendar": "^1.0.0",
     "@strapi/plugin-cloud": "5.25.0",
+    "@strapi/plugin-color-picker": "^5.25.0",
     "@strapi/plugin-users-permissions": "5.25.0",
     "@strapi/strapi": "5.25.0",
     "better-sqlite3": "11.3.0",

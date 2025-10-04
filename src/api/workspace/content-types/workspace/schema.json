@@ -27,6 +27,14 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "workspace"
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "default": false
+    },
+    "isRestored": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
